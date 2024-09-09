@@ -1,5 +1,7 @@
 package fr.dawan.portal_event.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,10 @@ public class EventService {
 
     public Event createEvent(Event event) {
         return eventRepository.save(event);  // Sauvegarde l'événement en base de données
+    }
+
+    public List<Event> getAllEvents(){
+        return eventRepository.findAll();
     }
 
 }

@@ -8,5 +8,5 @@ import javax.swing.event.DocumentEvent.EventType;
 
 
 public interface EventRepository extends JpaRepository<Event, Long>{
-    List<Event> findByEventType(EventType eventType);
+    //List<Event> findByEventType(EventType eventType);
 }

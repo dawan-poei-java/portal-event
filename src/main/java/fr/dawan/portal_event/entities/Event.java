@@ -33,8 +33,8 @@ public class Event {
     private String title;
     private String description;
 
-    @Enumerated(EnumType.STRING)
-    private EventType eventType;
+    /*@Enumerated(EnumType.STRING)
+    private EventType eventType;*/
 
     private LocalDateTime startDate;
     private LocalDateTime endDate;
