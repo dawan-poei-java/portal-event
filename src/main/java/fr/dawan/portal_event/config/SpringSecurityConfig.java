@@ -40,14 +40,12 @@ public class SpringSecurityConfig {
 	
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {	
-		CustomAuthenticationFilter customFilter = new CustomAuthenticationFilter(authenticationManager(http));
 		
 		return http
 				.csrf(csrf -> csrf.disable())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.httpBasic(Customizer.withDefaults())
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()))
-				.addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class)
 				//.cors(Customizer.withDefaults())
 				.build();		
 	}
@@ -77,14 +75,13 @@ public class SpringSecurityConfig {
         return new CustomUserDetailsService();
     }
 
-    @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        return http.getSharedObject(AuthenticationConfiguration.class).getAuthenticationManager();
-    }
+	@Bean
+	public AuthenticationManager configure(HttpSecurity http,
+		PasswordEncoder passwordEncoder) throws Exception {
+		return http.getSharedObject(AuthenticationManagerBuilder.class)
+		.userDetailsService(this.userDetailsService()).passwordEncoder(passwordEncoder)
+		.and().build();
+	}
 
-    @Bean
-    public CustomAuthenticationFilter customAuthenticationFilter(AuthenticationManager authenticationManager) {
-        return new CustomAuthenticationFilter(authenticationManager);
-    }
 
 }
