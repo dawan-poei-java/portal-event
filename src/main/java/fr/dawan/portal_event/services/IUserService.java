@@ -9,4 +9,5 @@ public interface IUserService {
     UserDto saveOrUpdate(UserDto dto);
     void deleteById(long id);
     UserDto getById(long id);
+    String register(UserDto dto);
 }

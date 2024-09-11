@@ -1,20 +1,29 @@
 package fr.dawan.portal_event.services;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import fr.dawan.portal_event.dto.EventDto;
 import fr.dawan.portal_event.dto.UserDto;
 import fr.dawan.portal_event.entities.User;
+import fr.dawan.portal_event.enums.UserRole;
 import fr.dawan.portal_event.repositories.UserRepository;
 import fr.dawan.portal_event.utils.DtoTool;
 
 @Service
 public class UserService implements IUserService{
+
+    @Autowired
+    private JwtService jwtService;
 
     @Autowired
     private UserRepository userRepository;
@@ -57,4 +66,21 @@ public class UserService implements IUserService{
         return null;
     }
 
+    @Override
+    public String register(UserDto dto){
+        if(userRepository.existsByEmail(dto.getEmail())){
+            throw new RuntimeException("Cet utilisateur existe déjà !");
+        }
+
+        // Config dto
+        dto.setRole(dto.getRole() == null ? UserRole.USER : dto.getRole());
+        User user = DtoTool.convert(dto, User.class);
+
+        userRepository.save(user);
+
+        //Generate Authentication object
+        Collection<? extends GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + dto.getRole()));
+
+        return jwtService.generateToken(new UsernamePasswordAuthenticationToken(dto.getEmail(), null, authorities));
+    }
 }

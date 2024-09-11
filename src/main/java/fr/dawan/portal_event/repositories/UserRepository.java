@@ -6,4 +6,8 @@ import fr.dawan.portal_event.entities.User;
 
 public interface UserRepository extends JpaRepository<User, Long>{
 
+    boolean existsByEmail(String email);
+
+    User findByEmail(String email);
+
 }
