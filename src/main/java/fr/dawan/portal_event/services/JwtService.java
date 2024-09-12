@@ -11,8 +11,12 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
+import fr.dawan.portal_event.dto.UserDto;
+
 @Service
 public class JwtService {
+
+
     private JwtEncoder jwtEncoder;
 
     public JwtService(JwtEncoder jwtEncoder){
@@ -21,6 +25,7 @@ public class JwtService {
 
     public String generateToken(Authentication authentication){
         Instant now = Instant.now();
+        //UserDto dto = (UserDto) authentication.getPrincipal();
 
         JwtClaimsSet claims = JwtClaimsSet.builder()
         .issuer("self")
@@ -33,4 +38,5 @@ public class JwtService {
 
         return this.jwtEncoder.encode(jwtEncoderParameters).getTokenValue();
     }
+
 }
