@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import fr.dawan.portal_event.entities.User;
 import fr.dawan.portal_event.repositories.UserRepository;
 
-@Service
+//@Service
 public class CustomUserDetailsService implements UserDetailsService{
     @Autowired
     private UserRepository userRepository;
