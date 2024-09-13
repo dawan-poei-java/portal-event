@@ -10,7 +10,7 @@ public class WebConfig implements WebMvcConfigurer{
     @Override
     public void addCorsMappings(CorsRegistry registry){
         registry.addMapping("/**")
-        .allowedOrigins("http://localhost:3000") /*TODO: changer en prod ou en fonction du port du projet React */
+        .allowedOrigins("http://localhost:5173") /*TODO: changer en prod ou en fonction du port du projet React */
         .allowedMethods("GET", "POST", "PUT", "DELETE")
         .allowedHeaders("*")
         .allowCredentials(true);

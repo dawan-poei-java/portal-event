@@ -3,7 +3,12 @@ package fr.dawan.portal_event.services;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+
 import org.springframework.stereotype.Service;
+
+import fr.dawan.portal_event.dto.CustomUserDetails;
+import fr.dawan.portal_event.dto.LoginResponse;
+import jakarta.security.auth.message.AuthException;
 
 @Service
 public class AuthenticationService {
@@ -15,9 +20,23 @@ public class AuthenticationService {
         this.jwtService = jwtService;
     }
 
-    public String authenticate(String email, String password){
+    public LoginResponse authenticate(String email, String password) throws AuthException{
         Authentication authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
-        return jwtService.generateToken(authentication);
+
+        Object principal = authentication.getPrincipal();
+        if(principal instanceof CustomUserDetails){
+            CustomUserDetails userDetails = (CustomUserDetails) principal;
+            LoginResponse response = new LoginResponse(
+                jwtService.generateToken(authentication),
+                userDetails.getUsername(),
+                userDetails.getRole(),
+                userDetails.getFirstName(),
+                userDetails.getLastName()
+            );
+            return response;
+            
+        }
+        else throw new AuthException("Authentication failed");
     }
 }

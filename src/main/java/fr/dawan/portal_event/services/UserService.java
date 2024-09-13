@@ -13,6 +13,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import fr.dawan.portal_event.dto.EventDto;
+import fr.dawan.portal_event.dto.LoginResponse;
 import fr.dawan.portal_event.dto.UserDto;
 import fr.dawan.portal_event.entities.User;
 import fr.dawan.portal_event.enums.UserRole;
@@ -67,7 +68,7 @@ public class UserService implements IUserService{
     }
 
     @Override
-    public String register(UserDto dto){
+    public LoginResponse register(UserDto dto){
         if(userRepository.existsByEmail(dto.getEmail())){
             throw new RuntimeException("Cet utilisateur existe déjà !");
         }
@@ -81,6 +82,14 @@ public class UserService implements IUserService{
         //Generate Authentication object
         Collection<? extends GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + dto.getRole()));
 
-        return jwtService.generateToken(new UsernamePasswordAuthenticationToken(dto.getEmail(), null, authorities));
+        LoginResponse response = new LoginResponse(
+            jwtService.generateToken(new UsernamePasswordAuthenticationToken(dto.getEmail(), null, authorities)),
+            dto.getEmail(),
+            dto.getRole(),
+            dto.getFirstName(),
+            dto.getLastName()
+        );
+
+        return response;
     }
 }
