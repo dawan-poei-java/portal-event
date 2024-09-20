@@ -25,6 +25,7 @@ import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 
@@ -34,6 +35,7 @@ import fr.dawan.portal_event.services.CustomUserDetailsService;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+//@CrossOrigin(origins = "http://localhost:5173")
 public class SpringSecurityConfig {
 
 
@@ -47,7 +49,6 @@ public class SpringSecurityConfig {
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.httpBasic(Customizer.withDefaults())
                 .oauth2ResourceServer((oauth2) -> oauth2.jwt(Customizer.withDefaults()))
-				//.cors(Customizer.withDefaults())
 				.build();		
 	}
 	
@@ -59,6 +60,7 @@ public class SpringSecurityConfig {
     }
 
 
+	// TODO: Sécuriser le jwtKey en utilisant une var env et si possible le rendre dynamique?
 	private String jwtKey = "B3ayAnStKJtSHPZqdNF0SNPFMF7uU5Q8";
     @Bean
     public JwtEncoder jwtEncoder() {

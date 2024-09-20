@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import fr.dawan.portal_event.dto.CustomUserDetails;
 import fr.dawan.portal_event.entities.User;
 import fr.dawan.portal_event.repositories.UserRepository;
 
@@ -23,8 +24,8 @@ public class CustomUserDetailsService implements UserDetailsService{
         User user = userRepository.findByEmail(email);
         if(user == null) throw new UsernameNotFoundException("User not found with email: " + email + " .");
 
-        GrantedAuthority authority = new SimpleGrantedAuthority("ROLE" + user.getUserRole());
+        GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + user.getUserRole());
 
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), Collections.singleton(authority));
+        return new CustomUserDetails(user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName(), Collections.singleton(authority));
     }
 }
