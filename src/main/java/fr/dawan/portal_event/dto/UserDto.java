@@ -21,6 +21,11 @@ public class UserDto {
     private String firstName;
     private String lastName;
     private String email;
+    private String phoneNumber;
+    private String address;
+    private String addressComplement;
+    private String city;
+    private String zipCode;
     private String password;
     private LocalDateTime createdAt;
     private UserRole role;
