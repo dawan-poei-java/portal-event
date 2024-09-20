@@ -20,6 +20,8 @@ import fr.dawan.portal_event.enums.UserRole;
 import fr.dawan.portal_event.repositories.UserRepository;
 import fr.dawan.portal_event.utils.DtoTool;
 
+import java.time.LocalDateTime;
+
 @Service
 public class UserService implements IUserService{
 
@@ -87,7 +89,8 @@ public class UserService implements IUserService{
             dto.getEmail(),
             dto.getRole(),
             dto.getFirstName(),
-            dto.getLastName()
+            dto.getLastName(),
+            LocalDateTime.now().plusDays(1)
         );
 
         return response;

@@ -10,6 +10,8 @@ import fr.dawan.portal_event.dto.CustomUserDetails;
 import fr.dawan.portal_event.dto.LoginResponse;
 import jakarta.security.auth.message.AuthException;
 
+import java.time.LocalDateTime;
+
 @Service
 public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
@@ -27,12 +29,14 @@ public class AuthenticationService {
         Object principal = authentication.getPrincipal();
         if(principal instanceof CustomUserDetails){
             CustomUserDetails userDetails = (CustomUserDetails) principal;
+            LocalDateTime now = LocalDateTime.now();
             LoginResponse response = new LoginResponse(
                 jwtService.generateToken(authentication),
                 userDetails.getUsername(),
                 userDetails.getRole(),
                 userDetails.getFirstName(),
-                userDetails.getLastName()
+                userDetails.getLastName(),
+                now.plusDays(1)
             );
             return response;
             

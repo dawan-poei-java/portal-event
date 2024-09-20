@@ -5,6 +5,9 @@ import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
+
 import fr.dawan.portal_event.enums.UserRole;
 
 @Getter
@@ -20,5 +23,5 @@ public class LoginResponse {
     private String firstName;
     private String lastName;
 
-
+    private LocalDateTime expiresAt;
 }
