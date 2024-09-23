@@ -54,16 +54,16 @@ public class Event {
     @JoinColumn(name = "location_id")
     private Location location;*/
 
-    /*@ManyToOne
+    @ManyToOne
     @JoinColumn(name = "organizer_id")
-    private User organizer;*/
+    private User organizer;
 
-    /*@ManyToMany
+    @ManyToMany
     @JoinTable(
         name = "event_participants",
         joinColumns = @JoinColumn(name = "event_id"),
         inverseJoinColumns = @JoinColumn(name = "user_id")
-    )*/
-    //private List<User> participants;
+    )
+    private List<User> participants;
 
 }
