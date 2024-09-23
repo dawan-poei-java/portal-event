@@ -2,6 +2,7 @@ package fr.dawan.portal_event.dto;
 
 import java.time.LocalDateTime;
 
+import fr.dawan.portal_event.entities.City;
 import fr.dawan.portal_event.enums.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,13 +22,13 @@ public class UserDto {
     private String firstName;
     private String lastName;
     private String email;
+    private String password;
+    private LocalDateTime createdAt;
     private String phoneNumber;
     private String address;
     private String addressComplement;
-    private String city;
+    private City city;
     private String zipCode;
-    private String password;
-    private LocalDateTime createdAt;
     private UserRole role;
 
 }
