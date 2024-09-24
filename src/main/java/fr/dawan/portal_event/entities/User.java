@@ -49,7 +49,7 @@ public class User {
     @PrePersist
     protected void onCreate(){
         this.createdAt = LocalDateTime.now();
-        if(this.userRole == null) this.userRole = UserRole.ORGANIZER;
+        if(this.userRole == null) this.userRole = UserRole.USER;
     }
 
 }

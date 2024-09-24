@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,10 +24,16 @@ public class EventController {
     private EventService eventService;
 
     @GetMapping
-    @PreAuthorize("isAuthenticated")
+    //@PreAuthorize("isAuthenticated")
     public ResponseEntity<List<Event>> getAllEvents(){
             List<Event> events = eventService.getAllEvents();
         return new ResponseEntity<>(events, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Event> getEventById(@PathVariable("id") long id){
+        Event event = eventService.getById(id);
+        return new ResponseEntity<>(event, HttpStatus.OK);
     }
 
     @PostMapping

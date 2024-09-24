@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.swing.event.DocumentEvent.EventType;
 
+import fr.dawan.portal_event.enums.EventState;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -65,5 +66,13 @@ public class Event {
         inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private List<User> participants;
+
+    @Enumerated(EnumType.STRING)
+    private EventState state;
+
+    @PrePersist
+    public void onCreate() {
+        if(this.state == null)this.state = EventState.WAITING;
+    }
 
 }
