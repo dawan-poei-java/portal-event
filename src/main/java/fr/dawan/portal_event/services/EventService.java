@@ -23,4 +23,8 @@ public class EventService {
         return eventRepository.findAll();
     }
 
+    public Event getById(long id){
+        return eventRepository.findById(id).get();
+    }
+
 }
