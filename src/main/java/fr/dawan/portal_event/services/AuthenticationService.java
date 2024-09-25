@@ -66,7 +66,7 @@ public class AuthenticationService {
 
         userRepository.save(user);
 
-        Collection<? extends GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + dto.getRole()));
+        Collection<? extends GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(dto.getRole().toString()));
 
         LoginResponse response = new LoginResponse(
             jwtService.generateToken(new UsernamePasswordAuthenticationToken(dto.getEmail(), null, authorities)),

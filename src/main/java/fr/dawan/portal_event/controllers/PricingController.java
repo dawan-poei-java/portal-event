@@ -59,7 +59,7 @@ public class PricingController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_ORGANIZER') or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ORGANIZER') or hasRole('ADMIN')")
     public ResponseEntity<PricingDto> createPricing(@RequestBody PricingDto pricing){
         PricingDto createdPricing = pricingService.saveOrUpdate(pricing);
         return new ResponseEntity<>(createdPricing, HttpStatus.CREATED);
@@ -74,7 +74,7 @@ public class PricingController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")    
+    @PreAuthorize("hasRole('ADMIN')")    
     public ResponseEntity<PricingDto> updatePricing(@PathVariable("id") long id, @RequestBody PricingDto pricing){
         PricingDto updatedPricing = pricingService.saveOrUpdate(pricing);
         return new ResponseEntity<>(updatedPricing, HttpStatus.OK);
@@ -88,7 +88,7 @@ public class PricingController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")    
+    @PreAuthorize("hasRole('ADMIN')")    
     public ResponseEntity<String> deletePricing(@PathVariable("id") long id){
         pricingService.deleteById(id);
         return ResponseEntity.status(HttpStatus.OK).body("Pricing with id = " + id + " deleted.");

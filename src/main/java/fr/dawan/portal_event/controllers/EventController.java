@@ -60,7 +60,7 @@ public class EventController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_ORGANIZER') or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ORGANIZER') or hasRole('ADMIN')")
     public ResponseEntity<EventDto> createEvent(@RequestBody EventDto event){
         EventDto createdEvent = eventService.saveOrUpdate(event);
         return new ResponseEntity<>(createdEvent, HttpStatus.CREATED);
@@ -75,7 +75,7 @@ public class EventController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ORGANIZER') or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ORGANIZER') or hasRole('ADMIN')")
     public ResponseEntity<EventDto> updateEvent(@PathVariable("id") long id, @RequestBody EventDto event){
         event.setId(id);
         EventDto updatedEvent = eventService.saveOrUpdate(event);
@@ -90,7 +90,7 @@ public class EventController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ORGANIZER') or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ORGANIZER') or hasRole('ADMIN')")
     public ResponseEntity<Void> deleteEvent(@PathVariable("id") long id){
         eventService.deleteEvent(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

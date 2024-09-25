@@ -17,6 +17,7 @@ public class City {
         this.name = name;
     }
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
