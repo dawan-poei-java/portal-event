@@ -59,7 +59,7 @@ public class TypeEventController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_ORGANIZER') or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")    
     public ResponseEntity<TypeEventDto> createTypeEvent(@RequestBody TypeEventDto typeEvent){
         TypeEventDto createdTypeEvent = typeEventService.saveOrUpdate(typeEvent);
         return new ResponseEntity<>(createdTypeEvent, HttpStatus.CREATED);
@@ -74,7 +74,7 @@ public class TypeEventController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ORGANIZER') or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")    
     public ResponseEntity<TypeEventDto> updateTypeEvent(@PathVariable("id") long id, @RequestBody TypeEventDto typeEvent){
         TypeEventDto updatedTypeEvent = typeEventService.saveOrUpdate(typeEvent);
         return new ResponseEntity<>(updatedTypeEvent, HttpStatus.OK);
@@ -88,7 +88,7 @@ public class TypeEventController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ORGANIZER') or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")    
     public ResponseEntity<String> deleteTypeEvent(@PathVariable("id") long id){
         typeEventService.deleteById(id);
         return ResponseEntity.status(HttpStatus.OK).body("TypeEvent with id = " + id + " deleted.");

@@ -59,7 +59,7 @@ public class CityController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_ORGANIZER') or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")    
     public ResponseEntity<CityDto> createCity(@RequestBody CityDto city){
         CityDto createdCity = cityService.saveOrUpdate(city);
         return new ResponseEntity<>(createdCity, HttpStatus.CREATED);
@@ -74,7 +74,7 @@ public class CityController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ORGANIZER') or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")    
     public ResponseEntity<CityDto> updateCity(@PathVariable("id") long id, @RequestBody CityDto city){
         CityDto updatedCity = cityService.saveOrUpdate(city);
         return new ResponseEntity<>(updatedCity, HttpStatus.OK);
@@ -88,7 +88,7 @@ public class CityController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ORGANIZER') or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")    
     public ResponseEntity<String> deleteCity(@PathVariable("id") long id){
         cityService.deleteById(id);
         return ResponseEntity.status(HttpStatus.OK).body("City with id = " + id + " deleted.");

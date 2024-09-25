@@ -59,7 +59,7 @@ public class CategoryController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_ORGANIZER') or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<CategoryDto> createCategory(@RequestBody CategoryDto category){
         CategoryDto createdCategory = categoryService.saveOrUpdate(category);
         return new ResponseEntity<>(createdCategory, HttpStatus.CREATED);
@@ -74,7 +74,7 @@ public class CategoryController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ORGANIZER') or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<CategoryDto> updateCategory(@PathVariable("id") long id, @RequestBody CategoryDto category){
         CategoryDto updatedCategory = categoryService.saveOrUpdate(category);
         return new ResponseEntity<>(updatedCategory, HttpStatus.OK);
@@ -88,7 +88,7 @@ public class CategoryController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ORGANIZER') or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> deleteCategory(@PathVariable("id") long id){
         categoryService.deleteById(id);
         return ResponseEntity.status(HttpStatus.OK).body("Category with id = " + id + " deleted.");

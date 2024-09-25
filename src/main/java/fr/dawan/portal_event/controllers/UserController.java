@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +33,7 @@ public class UserController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping(value="", produces = "application/json")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")    
     public ResponseEntity<List<UserDto>> getAllUsers() throws Exception{
         List<UserDto> users = userService.getAllBy(0, 0, "");
         return new ResponseEntity<>(users, HttpStatus.OK);
@@ -44,6 +46,7 @@ public class UserController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping(value="/{id}", consumes = "application/json", produces = "application/json")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")    
     public ResponseEntity<Object> getById(@PathVariable("id") long id) throws Exception{
         UserDto dto = userService.getById(id);
         if(dto == null){
@@ -61,6 +64,7 @@ public class UserController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PostMapping(value="", consumes = "application/json", produces = "application/json")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")    
     public ResponseEntity<UserDto> saveOrUpdate(@RequestBody UserDto dto) throws Exception{
         UserDto createdUser = userService.saveOrUpdate(dto);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
@@ -73,6 +77,7 @@ public class UserController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @DeleteMapping(value="/{id}", produces = "text/plain")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")    
     public ResponseEntity<String> deleteById(@PathVariable("id") long id) throws Exception{
         UserDto dto = userService.getById(id);
         if(dto!=null) {
