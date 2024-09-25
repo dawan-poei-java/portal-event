@@ -21,6 +21,9 @@ import fr.dawan.portal_event.services.CityService;
 import fr.dawan.portal_event.utils.DtoTool;
 import fr.dawan.portal_event.validations.OnLogin;
 import fr.dawan.portal_event.validations.OnRegister;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 
 @RestController
@@ -49,6 +52,11 @@ public class AuthController {
         this.authenticationManager = authenticationManager;
     }*/
 
+    @Operation(summary = "Login a user", description = "Login a user and return a JWT Token")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Login successful"),
+            @ApiResponse(responseCode = "400", description = "Invalid input")
+    })
     @PostMapping("/login")
     public ResponseEntity<?> login(@Validated(OnLogin.class) @RequestBody UserRequestDto dto) throws Exception{
         LoginResponse response = authenticationService.authenticate(dto.getEmail(), dto.getPassword());
@@ -57,6 +65,11 @@ public class AuthController {
 
 
     // TODO: configuer la route pour retourner des erreurs + précises (User already exists, Invalid input, etc)
+    @Operation(summary = "Register a user", description = "Register a user and return a JWT Token")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Register successful"),
+            @ApiResponse(responseCode = "400", description = "Invalid input")
+    })
     @PostMapping("/register")
     public ResponseEntity<?> register(@Validated(OnRegister.class) @RequestBody UserRequestDto dto){
         try {
