@@ -4,9 +4,11 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.event.DocumentEvent.EventType;
 
+import fr.dawan.portal_event.enums.EventState;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -54,16 +56,19 @@ public class Event {
     @JoinColumn(name = "location_id")
     private Location location;*/
 
-    /*@ManyToOne
+    @ManyToOne
     @JoinColumn(name = "organizer_id")
-    private User organizer;*/
+    private User organizer;
 
-    /*@ManyToMany
-    @JoinTable(
-        name = "event_participants",
-        joinColumns = @JoinColumn(name = "event_id"),
-        inverseJoinColumns = @JoinColumn(name = "user_id")
-    )*/
-    //private List<User> participants;
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    private Set<Reservation> reservations;
+
+    @Enumerated(EnumType.STRING)
+    private EventState state;
+
+    @PrePersist
+    public void onCreate() {
+        if(this.state == null)this.state = EventState.WAITING;
+    }
 
 }

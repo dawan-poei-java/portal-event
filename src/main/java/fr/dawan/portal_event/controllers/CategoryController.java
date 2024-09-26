@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import fr.dawan.portal_event.dto.EventDto;
-import fr.dawan.portal_event.services.EventService;
+import fr.dawan.portal_event.dto.CategoryDto;
+import fr.dawan.portal_event.services.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -24,48 +24,47 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @RestController
-@RequestMapping("/api/events")
-public class EventController {
+@RequestMapping("/api/categories")
+public class CategoryController {
 
     @Autowired
-    private EventService eventService;
+    private CategoryService categoryService;
 
-    @Operation(summary = "Get all events", description = "Retrieve a list of all events")
+    @Operation(summary = "Get all categories", description = "Retrieve a list of all categories")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully retrieved the list of events",
+        @ApiResponse(responseCode = "200", description = "Successfully retrieved the list of categories",
                      content = @Content(mediaType = "application/json",
-                     schema = @Schema(implementation = EventDto.class))),
+                     schema = @Schema(implementation = CategoryDto.class))),
         @ApiResponse(responseCode = "500", description = "Internal server error",
                      content = @Content)
     })
     @GetMapping
-    //@PreAuthorize("isAuthenticated")
-    public ResponseEntity<List<EventDto>> getAllEvents(){
-        List<EventDto> events = eventService.getAllEvents();
-        return new ResponseEntity<>(events, HttpStatus.OK);
+    public ResponseEntity<List<CategoryDto>> getAllCategories(){
+        List<CategoryDto> categories = categoryService.getAll();
+        return new ResponseEntity<>(categories, HttpStatus.OK);
     }
 
-    @Operation(summary = "Get an event by ID", description = "Retrieve a specific event by its ID")
+    @Operation(summary = "Get a category by ID", description = "Retrieve a specific category by its ID")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully retrieved the event",
+        @ApiResponse(responseCode = "200", description = "Successfully retrieved the category",
                      content = @Content(mediaType = "application/json",
-                     schema = @Schema(implementation = EventDto.class))),
-        @ApiResponse(responseCode = "404", description = "Event not found",
+                     schema = @Schema(implementation = CategoryDto.class))),
+        @ApiResponse(responseCode = "404", description = "Category not found",
                      content = @Content),
         @ApiResponse(responseCode = "500", description = "Internal server error",
                      content = @Content)
     })
     @GetMapping("/{id}")
-    public ResponseEntity<EventDto> getEventById(@PathVariable("id") long id){
-        EventDto event = eventService.getById(id);
-        return new ResponseEntity<>(event, HttpStatus.OK);
+    public ResponseEntity<CategoryDto> getCategoryById(@PathVariable("id") long id){
+        CategoryDto category = categoryService.getById(id);
+        return new ResponseEntity<>(category, HttpStatus.OK);
     }
 
-    @Operation(summary = "Create a new event", description = "Create a new event (requires ORGANIZER or ADMIN role)")
+    @Operation(summary = "Create a new category", description = "Create a new category (requires ADMIN role)")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Successfully created the event",
+        @ApiResponse(responseCode = "201", description = "Successfully created the category",
                      content = @Content(mediaType = "application/json",
-                     schema = @Schema(implementation = EventDto.class))),
+                     schema = @Schema(implementation = CategoryDto.class))),
         @ApiResponse(responseCode = "400", description = "Invalid input",
                      content = @Content),
         @ApiResponse(responseCode = "403", description = "Access denied",
@@ -74,49 +73,49 @@ public class EventController {
                      content = @Content)
     })
     @PostMapping
-    @PreAuthorize("hasRole('ORGANIZER') or hasRole('ADMIN')")
-    public ResponseEntity<EventDto> createEvent(@RequestBody EventDto event){
-        EventDto createdEvent = eventService.saveOrUpdate(event);
-        return new ResponseEntity<>(createdEvent, HttpStatus.CREATED);
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<CategoryDto> createCategory(@RequestBody CategoryDto category){
+        CategoryDto createdCategory = categoryService.saveOrUpdate(category);
+        return new ResponseEntity<>(createdCategory, HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Update an event", description = "Update an existing event (requires ORGANIZER or ADMIN role)")
+    @Operation(summary = "Update a category", description = "Update an existing category by its ID (requires ADMIN role)")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully updated the event",
+        @ApiResponse(responseCode = "200", description = "Successfully updated the category",
                      content = @Content(mediaType = "application/json",
-                     schema = @Schema(implementation = EventDto.class))),
+                     schema = @Schema(implementation = CategoryDto.class))),
         @ApiResponse(responseCode = "400", description = "Invalid input",
                      content = @Content),
         @ApiResponse(responseCode = "403", description = "Access denied",
                      content = @Content),
-        @ApiResponse(responseCode = "404", description = "Event not found",
+        @ApiResponse(responseCode = "404", description = "Category not found",
                      content = @Content),
         @ApiResponse(responseCode = "500", description = "Internal server error",
                      content = @Content)
     })
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ORGANIZER') or hasRole('ADMIN')")
-    public ResponseEntity<EventDto> updateEvent(@PathVariable("id") long id, @RequestBody EventDto event){
-        event.setId(id);
-        EventDto updatedEvent = eventService.saveOrUpdate(event);
-        return new ResponseEntity<>(updatedEvent, HttpStatus.OK);
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<CategoryDto> updateCategory(@PathVariable("id") long id, @RequestBody CategoryDto category){
+        CategoryDto updatedCategory = categoryService.saveOrUpdate(category);
+        return new ResponseEntity<>(updatedCategory, HttpStatus.OK);
     }
 
-    @Operation(summary = "Delete an event", description = "Delete an existing event (requires ORGANIZER or ADMIN role)")
+    @Operation(summary = "Delete a category", description = "Delete a category by its ID (requires ADMIN role)")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "204", description = "Successfully deleted the event",
-                     content = @Content),
+        @ApiResponse(responseCode = "200", description = "Successfully deleted the category",
+                     content = @Content(mediaType = "text/plain",
+                     schema = @Schema(type = "string"))),
         @ApiResponse(responseCode = "403", description = "Access denied",
                      content = @Content),
-        @ApiResponse(responseCode = "404", description = "Event not found",
+        @ApiResponse(responseCode = "404", description = "Category not found",
                      content = @Content),
         @ApiResponse(responseCode = "500", description = "Internal server error",
                      content = @Content)
     })
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ORGANIZER') or hasRole('ADMIN')")
-    public ResponseEntity<Void> deleteEvent(@PathVariable("id") long id){
-        eventService.deleteEvent(id);
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<String> deleteCategory(@PathVariable("id") long id){
+        categoryService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

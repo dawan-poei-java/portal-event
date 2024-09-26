@@ -6,15 +6,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class CityDto {
-
+@AllArgsConstructor
+@Builder
+public class ReservationDto {
     private Long id;
-    private String name;
-    
-    public CityDto(String name) {
-        this.name = name;
-    }
+    private EventDto event;
+    private UserDto user;
+    private PricingDto pricing;
 }
