@@ -51,9 +51,9 @@ public class CityController {
         return new ResponseEntity<>(city, HttpStatus.OK);
     }
 
-    @Operation(summary = "Create a new city", description = "Create a new city (requires ORGANIZER or ADMIN role)")
+    @Operation(summary = "Create a new city", description = "Create a new city (requires ADMIN role)")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Successfully created the city"),
+        @ApiResponse(responseCode = "201", description = "City successfully created"),
         @ApiResponse(responseCode = "400", description = "Invalid input"),
         @ApiResponse(responseCode = "403", description = "Access denied"),
         @ApiResponse(responseCode = "500", description = "Internal server error")
@@ -65,9 +65,9 @@ public class CityController {
         return new ResponseEntity<>(createdCity, HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Update a city", description = "Update an existing city by its ID (requires ORGANIZER or ADMIN role)")
+    @Operation(summary = "Update a city", description = "Update an existing city by its ID (requires ADMIN role)")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully updated the city"),
+        @ApiResponse(responseCode = "200", description = "City successfully updated"),
         @ApiResponse(responseCode = "400", description = "Invalid input"),
         @ApiResponse(responseCode = "403", description = "Access denied"),
         @ApiResponse(responseCode = "404", description = "City not found"),
@@ -80,9 +80,9 @@ public class CityController {
         return new ResponseEntity<>(updatedCity, HttpStatus.OK);
     }
 
-    @Operation(summary = "Delete a city", description = "Delete a city by its ID (requires ORGANIZER or ADMIN role)")
+    @Operation(summary = "Delete a city", description = "Delete a city by its ID (requires ADMIN role)")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully deleted the city"),
+        @ApiResponse(responseCode = "200", description = "City successfully deleted"),
         @ApiResponse(responseCode = "403", description = "Access denied"),
         @ApiResponse(responseCode = "404", description = "City not found"),
         @ApiResponse(responseCode = "500", description = "Internal server error")

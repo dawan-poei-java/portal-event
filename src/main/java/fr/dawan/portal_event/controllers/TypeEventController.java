@@ -20,6 +20,8 @@ import fr.dawan.portal_event.services.TypeEventService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 @RestController
 @RequestMapping("/api/typeEvents")
@@ -30,8 +32,11 @@ public class TypeEventController {
 
     @Operation(summary = "Get all type events", description = "Retrieve a list of all type events")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully retrieved the list of type events"),
-        @ApiResponse(responseCode = "500", description = "Internal server error")
+        @ApiResponse(responseCode = "200", description = "Successfully retrieved the list of type events",
+                     content = @Content(mediaType = "application/json",
+                     schema = @Schema(implementation = TypeEventDto[].class))),
+        @ApiResponse(responseCode = "500", description = "Internal server error",
+                     content = @Content)
     })
     @GetMapping
     public ResponseEntity<List<TypeEventDto>> getAllTypeEvents(){
@@ -41,9 +46,13 @@ public class TypeEventController {
 
     @Operation(summary = "Get a type event by ID", description = "Retrieve a specific type event by its ID")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully retrieved the type event"),
-        @ApiResponse(responseCode = "404", description = "Type event not found"),
-        @ApiResponse(responseCode = "500", description = "Internal server error")
+        @ApiResponse(responseCode = "200", description = "Successfully retrieved the type event",
+                     content = @Content(mediaType = "application/json",
+                     schema = @Schema(implementation = TypeEventDto.class))),
+        @ApiResponse(responseCode = "404", description = "Type event not found",
+                     content = @Content),
+        @ApiResponse(responseCode = "500", description = "Internal server error",
+                     content = @Content)
     })
     @GetMapping("/{id}")
     public ResponseEntity<TypeEventDto> getTypeEventById(@PathVariable long id){
@@ -53,10 +62,15 @@ public class TypeEventController {
 
     @Operation(summary = "Create a new type event", description = "Create a new type event (requires ORGANIZER or ADMIN role)")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Successfully created the type event"),
-        @ApiResponse(responseCode = "400", description = "Invalid input"),
-        @ApiResponse(responseCode = "403", description = "Access denied"),
-        @ApiResponse(responseCode = "500", description = "Internal server error")
+        @ApiResponse(responseCode = "201", description = "Successfully created the type event",
+                     content = @Content(mediaType = "application/json",
+                     schema = @Schema(implementation = TypeEventDto.class))),
+        @ApiResponse(responseCode = "400", description = "Invalid input",
+                     content = @Content),
+        @ApiResponse(responseCode = "403", description = "Access denied",
+                     content = @Content),
+        @ApiResponse(responseCode = "500", description = "Internal server error",
+                     content = @Content)
     })
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")    
@@ -67,11 +81,17 @@ public class TypeEventController {
 
     @Operation(summary = "Update a type event", description = "Update an existing type event by its ID (requires ORGANIZER or ADMIN role)")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully updated the type event"),
-        @ApiResponse(responseCode = "400", description = "Invalid input"),
-        @ApiResponse(responseCode = "403", description = "Access denied"),
-        @ApiResponse(responseCode = "404", description = "Type event not found"),
-        @ApiResponse(responseCode = "500", description = "Internal server error")
+        @ApiResponse(responseCode = "200", description = "Successfully updated the type event",
+                     content = @Content(mediaType = "application/json",
+                     schema = @Schema(implementation = TypeEventDto.class))),
+        @ApiResponse(responseCode = "400", description = "Invalid input",
+                     content = @Content),
+        @ApiResponse(responseCode = "403", description = "Access denied",
+                     content = @Content),
+        @ApiResponse(responseCode = "404", description = "Type event not found",
+                     content = @Content),
+        @ApiResponse(responseCode = "500", description = "Internal server error",
+                     content = @Content)
     })
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")    
@@ -82,10 +102,15 @@ public class TypeEventController {
 
     @Operation(summary = "Delete a type event", description = "Delete a type event by its ID (requires ORGANIZER or ADMIN role)")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully deleted the type event"),
-        @ApiResponse(responseCode = "403", description = "Access denied"),
-        @ApiResponse(responseCode = "404", description = "Type event not found"),
-        @ApiResponse(responseCode = "500", description = "Internal server error")
+        @ApiResponse(responseCode = "200", description = "Successfully deleted the type event",
+                     content = @Content(mediaType = "text/plain",
+                     schema = @Schema(type = "string"))),
+        @ApiResponse(responseCode = "403", description = "Access denied",
+                     content = @Content),
+        @ApiResponse(responseCode = "404", description = "Type event not found",
+                     content = @Content),
+        @ApiResponse(responseCode = "500", description = "Internal server error",
+                     content = @Content)
     })
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")    

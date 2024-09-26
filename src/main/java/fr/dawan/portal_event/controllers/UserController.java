@@ -20,7 +20,8 @@ import fr.dawan.portal_event.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 @RestController
 @RequestMapping("/api/users")
@@ -32,8 +33,11 @@ public class UserController {
 
     @Operation(summary = "Get all users", description = "Retrieve a list of all users")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully retrieved the list of users"),
-        @ApiResponse(responseCode = "500", description = "Internal server error")
+        @ApiResponse(responseCode = "200", description = "Successfully retrieved the list of users",
+                     content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = UserDto.class))),
+        @ApiResponse(responseCode = "500", description = "Internal server error",
+                     content = @Content)
     })
     @GetMapping(value="", produces = "application/json")
     @PreAuthorize("hasRole('ADMIN')")    
@@ -44,9 +48,14 @@ public class UserController {
 
     @Operation(summary = "Get a user by ID", description = "Retrieve a specific user by its ID")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully retrieved the user"),
-        @ApiResponse(responseCode = "404", description = "User not found"),
-        @ApiResponse(responseCode = "500", description = "Internal server error")
+        @ApiResponse(responseCode = "200", description = "Successfully retrieved the user",
+                     content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = UserDto.class))),
+        @ApiResponse(responseCode = "404", description = "User not found",
+                     content = @Content(mediaType = "text/plain",
+                                        schema = @Schema(type = "string"))),
+        @ApiResponse(responseCode = "500", description = "Internal server error",
+                     content = @Content)
     })
     @GetMapping(value="/{id}", consumes = "application/json", produces = "application/json")
     @PreAuthorize("hasRole('ADMIN')")    
@@ -62,10 +71,15 @@ public class UserController {
 
     @Operation(summary = "Update an existing user", description = "Update an existing user by its ID")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully updated the user"),
-        @ApiResponse(responseCode = "400", description = "Invalid input"),
-        @ApiResponse(responseCode = "404", description = "User not found"),
-        @ApiResponse(responseCode = "500", description = "Internal server error")
+        @ApiResponse(responseCode = "200", description = "Successfully updated the user",
+                     content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = UserDto.class))),
+        @ApiResponse(responseCode = "400", description = "Invalid input",
+                     content = @Content),
+        @ApiResponse(responseCode = "404", description = "User not found",
+                     content = @Content),
+        @ApiResponse(responseCode = "500", description = "Internal server error",
+                     content = @Content)
     })
     @PutMapping(value="/{id}", consumes = "application/json", produces = "application/json")
     @PreAuthorize("hasRole('ADMIN')")    
@@ -80,9 +94,14 @@ public class UserController {
 
     @Operation(summary = "Delete a user", description = "Delete a user by its ID")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully deleted the user"),
-        @ApiResponse(responseCode = "404", description = "User not found"),
-        @ApiResponse(responseCode = "500", description = "Internal server error")
+        @ApiResponse(responseCode = "200", description = "Successfully deleted the user",
+                     content = @Content(mediaType = "text/plain",
+                                        schema = @Schema(type = "string"))),
+        @ApiResponse(responseCode = "404", description = "User not found",
+                     content = @Content(mediaType = "text/plain",
+                                        schema = @Schema(type = "string"))),
+        @ApiResponse(responseCode = "500", description = "Internal server error",
+                     content = @Content)
     })
     @DeleteMapping(value="/{id}", produces = "text/plain")
     @PreAuthorize("hasRole('ADMIN')")    
@@ -96,6 +115,4 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with id = " + id + " is not found.");
         }
     }
-
-
 }

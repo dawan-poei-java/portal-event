@@ -20,6 +20,8 @@ import fr.dawan.portal_event.services.EventService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 @RestController
 @RequestMapping("/api/events")
@@ -30,8 +32,11 @@ public class EventController {
 
     @Operation(summary = "Get all events", description = "Retrieve a list of all events")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully retrieved the list of events"),
-        @ApiResponse(responseCode = "500", description = "Internal server error")
+        @ApiResponse(responseCode = "200", description = "Successfully retrieved the list of events",
+                     content = @Content(mediaType = "application/json",
+                     schema = @Schema(implementation = EventDto.class))),
+        @ApiResponse(responseCode = "500", description = "Internal server error",
+                     content = @Content)
     })
     @GetMapping
     //@PreAuthorize("isAuthenticated")
@@ -42,9 +47,13 @@ public class EventController {
 
     @Operation(summary = "Get an event by ID", description = "Retrieve a specific event by its ID")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully retrieved the event"),
-        @ApiResponse(responseCode = "404", description = "Event not found"),
-        @ApiResponse(responseCode = "500", description = "Internal server error")
+        @ApiResponse(responseCode = "200", description = "Successfully retrieved the event",
+                     content = @Content(mediaType = "application/json",
+                     schema = @Schema(implementation = EventDto.class))),
+        @ApiResponse(responseCode = "404", description = "Event not found",
+                     content = @Content),
+        @ApiResponse(responseCode = "500", description = "Internal server error",
+                     content = @Content)
     })
     @GetMapping("/{id}")
     public ResponseEntity<EventDto> getEventById(@PathVariable("id") long id){
@@ -54,10 +63,15 @@ public class EventController {
 
     @Operation(summary = "Create a new event", description = "Create a new event (requires ORGANIZER or ADMIN role)")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Successfully created the event"),
-        @ApiResponse(responseCode = "400", description = "Invalid input"),
-        @ApiResponse(responseCode = "403", description = "Access denied"),
-        @ApiResponse(responseCode = "500", description = "Internal server error")
+        @ApiResponse(responseCode = "201", description = "Successfully created the event",
+                     content = @Content(mediaType = "application/json",
+                     schema = @Schema(implementation = EventDto.class))),
+        @ApiResponse(responseCode = "400", description = "Invalid input",
+                     content = @Content),
+        @ApiResponse(responseCode = "403", description = "Access denied",
+                     content = @Content),
+        @ApiResponse(responseCode = "500", description = "Internal server error",
+                     content = @Content)
     })
     @PostMapping
     @PreAuthorize("hasRole('ORGANIZER') or hasRole('ADMIN')")
@@ -68,11 +82,17 @@ public class EventController {
 
     @Operation(summary = "Update an event", description = "Update an existing event (requires ORGANIZER or ADMIN role)")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully updated the event"),
-        @ApiResponse(responseCode = "400", description = "Invalid input"),
-        @ApiResponse(responseCode = "403", description = "Access denied"),
-        @ApiResponse(responseCode = "404", description = "Event not found"),
-        @ApiResponse(responseCode = "500", description = "Internal server error")
+        @ApiResponse(responseCode = "200", description = "Successfully updated the event",
+                     content = @Content(mediaType = "application/json",
+                     schema = @Schema(implementation = EventDto.class))),
+        @ApiResponse(responseCode = "400", description = "Invalid input",
+                     content = @Content),
+        @ApiResponse(responseCode = "403", description = "Access denied",
+                     content = @Content),
+        @ApiResponse(responseCode = "404", description = "Event not found",
+                     content = @Content),
+        @ApiResponse(responseCode = "500", description = "Internal server error",
+                     content = @Content)
     })
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ORGANIZER') or hasRole('ADMIN')")
@@ -84,10 +104,14 @@ public class EventController {
 
     @Operation(summary = "Delete an event", description = "Delete an existing event (requires ORGANIZER or ADMIN role)")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "204", description = "Successfully deleted the event"),
-        @ApiResponse(responseCode = "403", description = "Access denied"),
-        @ApiResponse(responseCode = "404", description = "Event not found"),
-        @ApiResponse(responseCode = "500", description = "Internal server error")
+        @ApiResponse(responseCode = "204", description = "Successfully deleted the event",
+                     content = @Content),
+        @ApiResponse(responseCode = "403", description = "Access denied",
+                     content = @Content),
+        @ApiResponse(responseCode = "404", description = "Event not found",
+                     content = @Content),
+        @ApiResponse(responseCode = "500", description = "Internal server error",
+                     content = @Content)
     })
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ORGANIZER') or hasRole('ADMIN')")
