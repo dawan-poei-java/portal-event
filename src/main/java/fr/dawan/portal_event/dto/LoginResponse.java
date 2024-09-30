@@ -28,4 +28,6 @@ public class LoginResponse {
     private String lastName;
     @Schema(description = "Expiration Date")
     private LocalDateTime expiresAt;
+    @Schema(description = "User ID")
+    private long userId;
 }

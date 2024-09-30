@@ -29,4 +29,27 @@ public class EventDto {
     private String zipCode;
     private List<PricingDto> pricings;
     private UserDto organizer;
+    private List<String> images;
+
+    @Data
+    public static class TypeEventDto {
+        private long id;
+        private String name;
+
+    }
+
+    @Data
+    public static class UserDto {
+        private long id;
+        private String firstName;
+        private String lastName;
+    }
+
+    @Data
+    public static class PricingDto {
+        private long id;
+        private String name;
+        private double price;
+    }
+
 }

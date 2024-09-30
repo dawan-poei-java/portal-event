@@ -21,6 +21,7 @@ public class CustomUserDetails implements UserDetails{
     private String firstName;
     private String lastName;
     private Set<GrantedAuthority> authorities;
+    private long userId;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

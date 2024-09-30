@@ -1,11 +1,11 @@
 package fr.dawan.portal_event.mappers;
 
-import fr.dawan.portal_event.dto.EventDto;
-import fr.dawan.portal_event.entities.Event;
+import fr.dawan.portal_event.dto.CityDto;
+import fr.dawan.portal_event.entities.City;
 import org.mapstruct.Mapper;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface CityMapper {
-    EventDto toDto(Event event);
-    Event toEntity(EventDto eventDto);
+    CityDto toDto(City city);
+    City toEntity(CityDto cityDto);
 }

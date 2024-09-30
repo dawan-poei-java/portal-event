@@ -1,5 +1,6 @@
 package fr.dawan.portal_event.entities;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -31,6 +32,8 @@ public class User {
     private String password;
 
     private LocalDateTime createdAt;
+
+    private LocalDate birthDate;
 
     @Column(nullable = false, unique = true)
     private String phoneNumber;
