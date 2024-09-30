@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -26,7 +27,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @RestController
 @RequestMapping("/api/categories")
 public class CategoryController {
-
+    
+    
     @Autowired
     private CategoryService categoryService;
 
@@ -59,6 +61,7 @@ public class CategoryController {
         CategoryDto category = categoryService.getById(id);
         return new ResponseEntity<>(category, HttpStatus.OK);
     }
+
 
     @Operation(summary = "Create a new category", description = "Create a new category (requires ADMIN role)")
     @ApiResponses(value = {
