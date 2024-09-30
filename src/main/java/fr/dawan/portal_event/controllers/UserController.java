@@ -57,8 +57,8 @@ public class UserController {
         @ApiResponse(responseCode = "500", description = "Internal server error",
                      content = @Content)
     })
-    @GetMapping(value="/{id}", consumes = "application/json", produces = "application/json")
-    @PreAuthorize("hasRole('ADMIN')")    
+    @GetMapping(value="/{id}", produces = "application/json")
+    @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")    
     public ResponseEntity<Object> getById(@PathVariable("id") long id) throws Exception{
         UserDto dto = userService.getById(id);
         if(dto == null){
@@ -82,7 +82,7 @@ public class UserController {
                      content = @Content)
     })
     @PutMapping(value="/{id}", consumes = "application/json", produces = "application/json")
-    @PreAuthorize("hasRole('ADMIN')")    
+    @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")    
     public ResponseEntity<UserDto> updateUser(@PathVariable("id") long id, @RequestBody UserDto dto) throws Exception {
         dto.setId(id);
         UserDto updatedUser = userService.saveOrUpdate(dto);

@@ -9,4 +9,7 @@ public interface IEventService {
     List<EventDto> getAllEvents();
     EventDto getById(long id);
     void deleteEvent(long id);
+    List<EventDto> getUpcomingEvents();
+    List<EventDto> getEventsByCity(String cityName);
+    
 }

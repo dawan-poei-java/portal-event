@@ -28,7 +28,7 @@ public class Event {
     private String title;
     private String description;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_type")
     private TypeEvent typeEvent;
 
@@ -51,6 +51,11 @@ public class Event {
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private List<Pricing> pricings;
+
+    @ElementCollection
+    @CollectionTable(name = "event_images", joinColumns = @JoinColumn(name = "event_id"))
+    @Column(name = "image_url")
+    private List<String> images;
 
     /*@ManyToOne
     @JoinColumn(name = "location_id")

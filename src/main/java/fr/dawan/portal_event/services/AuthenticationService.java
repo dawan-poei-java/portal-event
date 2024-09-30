@@ -48,7 +48,8 @@ public class AuthenticationService {
                 userDetails.getRole(),
                 userDetails.getFirstName(),
                 userDetails.getLastName(),
-                now.plusDays(1)
+                now.plusDays(1),
+                userDetails.getUserId()
             );
             return response;
             
@@ -74,7 +75,8 @@ public class AuthenticationService {
             dto.getRole(),
             dto.getFirstName(),
             dto.getLastName(),
-            LocalDateTime.now().plusDays(1)
+            LocalDateTime.now().plusDays(1),
+            user.getId()
         );
 
         return response;

@@ -1,8 +1,8 @@
 package fr.dawan.portal_event.dto;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import fr.dawan.portal_event.entities.City;
 import fr.dawan.portal_event.enums.UserRole;
 import fr.dawan.portal_event.utils.DtoTool;
 import io.micrometer.common.lang.Nullable;
@@ -32,6 +32,7 @@ public class UserDto {
         this.city = DtoTool.convert(userRequestDto.getCity(), CityDto.class);
         this.zipCode = userRequestDto.getZipCode();
         this.password = userRequestDto.getPassword();
+        this.birthDate = userRequestDto.getBirthDate();
     }
 
 
@@ -48,5 +49,5 @@ public class UserDto {
     private String password;
     private LocalDateTime createdAt;
     private UserRole role;
-
+    private LocalDate birthDate;
 }

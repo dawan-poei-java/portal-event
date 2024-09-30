@@ -1,5 +1,7 @@
 package fr.dawan.portal_event.dto;
 
+import java.time.LocalDate;
+
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 
 import fr.dawan.portal_event.entities.City;
@@ -12,9 +14,14 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class UserRequestDto {
 
     @NotBlank(groups = {OnLogin.class, OnRegister.class},message = "Email cannot be empty")
@@ -42,7 +49,11 @@ public class UserRequestDto {
     @NotNull(groups = {OnRegister.class}, message = "City must be specified")
     private City city;
 
+    @NotBlank(groups = {OnRegister.class}, message = "Zip code must be specified")
     private String zipCode;
+
+    @NotBlank(groups = {OnRegister.class}, message = "Birth date must be specified")
+    private LocalDate birthDate;
 
     public boolean isPasswordConfirmed() {
         return password.equals(confirmedPassword);
