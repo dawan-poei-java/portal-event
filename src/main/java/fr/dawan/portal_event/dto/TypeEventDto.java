@@ -12,8 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class TypeEventDto {
     private long id;
     private  String name;

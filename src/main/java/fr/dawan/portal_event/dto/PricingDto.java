@@ -10,8 +10,6 @@ import lombok.AllArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class PricingDto {
     private long id;
     private Double price;
