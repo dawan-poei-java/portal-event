@@ -6,6 +6,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import fr.dawan.portal_event.dto.CustomUserDetails;
@@ -63,6 +64,22 @@ public class AuthenticationService {
         );
 
         return response;
+    }
+
+
+    public boolean isAuthenticatedUserMatchingId(long userId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return false;
+        }
+
+        Object principal = authentication.getPrincipal();
+        if (principal instanceof CustomUserDetails) {
+            CustomUserDetails userDetails = (CustomUserDetails) principal;
+            return userDetails.getId() == userId;
+        }
+
+        return false;
     }
 
     

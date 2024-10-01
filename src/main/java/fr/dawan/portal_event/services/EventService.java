@@ -80,5 +80,15 @@ public class EventService implements IEventService {
         return eventDto;
     }
 
+    public List<EventDto> getEventsByOrganizer(long organizerId) {
+        // TODO: vérifier si l'organisateur existe vraiment
+        List<Event> events = eventRepository.findEventsByOrganizerId(organizerId);
+        List<EventDto> dtos = new ArrayList<>();
+        for(Event event: events){
+            dtos.add(DtoTool.convert(event, EventDto.class));
+        }
+        return dtos;
+    }
+
 
 }

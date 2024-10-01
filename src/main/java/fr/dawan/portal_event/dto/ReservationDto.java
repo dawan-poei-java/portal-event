@@ -10,8 +10,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class ReservationDto {
-    private Long id;
-    private EventDto event;
-    private UserDto user;
-    private PricingDto pricing;
+    private long id;  
+    private long eventId;
+    private long userId;
+    private long pricingId;
+    
+    /*     private EventDto event;
+        private UserDto user;
+        private PricingDto pricing; */
 }

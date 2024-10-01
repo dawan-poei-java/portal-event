@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
+import fr.dawan.portal_event.enums.EventState;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,6 +31,7 @@ public class EventDto {
     private List<PricingDto> pricings;
     private UserDto organizer;
     private List<String> images;
+    private EventState state;
 
     @Data
     public static class TypeEventDto {

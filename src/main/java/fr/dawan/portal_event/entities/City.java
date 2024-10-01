@@ -18,6 +18,10 @@ public class City {
         this.image = image;
     }
 
+    public City(long id){
+        this.id = id;
+    }
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
