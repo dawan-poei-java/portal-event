@@ -37,6 +37,7 @@ public class User {
     @Column(nullable = false)
     private String address;
 
+    @Column(nullable = true)
     private String addressComplement;
 
     @ManyToOne

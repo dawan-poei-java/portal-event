@@ -11,13 +11,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString
 @Builder
 public class UserDto {
 
@@ -26,13 +24,15 @@ public class UserDto {
         this.firstName = userRequestDto.getFirstName();
         this.lastName = userRequestDto.getLastName();
         this.email = userRequestDto.getEmail();
-        this.phoneNumber = "";
+        this.phoneNumber = userRequestDto.getPhoneNumber();
         this.address = userRequestDto.getAddress();
-        this.addressComplement = "";
+        this.addressComplement = userRequestDto.getAddressComplement();
         this.city = DtoTool.convert(userRequestDto.getCity(), CityDto.class);
         this.zipCode = userRequestDto.getZipCode();
         this.password = userRequestDto.getPassword();
         this.birthDate = userRequestDto.getBirthDate();
+        this.createdAt = LocalDateTime.now();
+        this.role = userRequestDto.getRole();
     }
 
 
@@ -47,7 +47,27 @@ public class UserDto {
     private CityDto city;
     private String zipCode;
     private String password;
+    @Nullable
     private LocalDateTime createdAt;
     private UserRole role;
     private LocalDate birthDate;
+
+@Override
+public String toString() {
+    return "UserDto{" +
+            "id=" + id +
+            ", firstName='" + firstName + '\'' +
+            ", lastName='" + lastName + '\'' +
+            ", email='" + email + '\'' +
+            ", phoneNumber='" + phoneNumber + '\'' +
+            ", address='" + address + '\'' +
+            ", addressComplement='" + addressComplement + '\'' +
+            ", city=" + city +
+            ", zipCode='" + zipCode + '\'' +
+            ", password='[PROTÉGÉ]'" +
+            ", createdAt=" + createdAt +
+            ", role=" + role +
+            ", birthDate=" + birthDate +
+            '}';
+}
 }

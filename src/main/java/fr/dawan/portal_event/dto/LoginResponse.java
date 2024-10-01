@@ -6,8 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
+import fr.dawan.portal_event.entities.User;
 import fr.dawan.portal_event.enums.UserRole;
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -26,8 +25,15 @@ public class LoginResponse {
     private String firstName;
     @Schema(description = "Last Name")
     private String lastName;
-    @Schema(description = "Expiration Date")
-    private LocalDateTime expiresAt;
     @Schema(description = "User ID")
     private long userId;
+
+    public LoginResponse(String token, User user){
+        this.token = token;
+        this.email = user.getEmail();
+        this.role = user.getUserRole();
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        this.userId = user.getId();
+    }
 }

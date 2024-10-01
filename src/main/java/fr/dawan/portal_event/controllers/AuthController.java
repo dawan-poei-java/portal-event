@@ -50,12 +50,6 @@ public class AuthController {
         this.authenticationService = authenticationService;
     }
 
-    /*public AuthController(JwtService jwtService, UserService userService, AuthenticationManager authenticationManager){
-        this.jwtService = jwtService;
-        this.userService = userService;
-        this.authenticationManager = authenticationManager;
-    }*/
-
     @Operation(summary = "Login a user", description = "Login a user and return a JWT Token")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Connexion réussie", 
@@ -90,10 +84,12 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@Validated(OnRegister.class) @RequestBody UserRequestDto dto) {
         try {
+            System.out.println("DTO reçu : " + dto.toString());
             City city = cityService.findAndReturnFilledCity(dto.getCity());
             dto.setCity(city);
             UserDto user = new UserDto(dto);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
+            System.out.println("UserDto : " + user.toString());
             LoginResponse response = authenticationService.register(user);
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {

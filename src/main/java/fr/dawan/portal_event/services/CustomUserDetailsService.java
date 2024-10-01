@@ -24,8 +24,8 @@ public class CustomUserDetailsService implements UserDetailsService{
         User user = userRepository.findByEmail(email);
         if(user == null) throw new UsernameNotFoundException("User not found with email: " + email + " .");
 
-        GrantedAuthority authority = new SimpleGrantedAuthority(user.getUserRole().toString());
+        //GrantedAuthority authority = new SimpleGrantedAuthority(user.getUserRole().toString());
 
-        return new CustomUserDetails(user.getEmail(), user.getPassword(), user.getFirstName(), user.getLastName(), Collections.singleton(authority), user.getId());
+        return new CustomUserDetails(user);
     }
 }

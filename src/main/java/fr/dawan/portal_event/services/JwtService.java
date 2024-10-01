@@ -16,6 +16,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
 import fr.dawan.portal_event.dto.CustomUserDetails;
+import fr.dawan.portal_event.entities.User;
 
 @Service
 public class JwtService {
@@ -27,10 +28,10 @@ public class JwtService {
         this.jwtEncoder = jwtEncoder;
     }
 
-    public String generateToken(Authentication authentication) {
+    public String generateToken(User user) {
         Instant now = Instant.now();
 
-        // Récupérer les rôles/autorités de l'utilisateur
+/*         // Récupérer les rôles/autorités de l'utilisateur
         List<String> roles = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
@@ -42,15 +43,15 @@ public class JwtService {
             if (userDetails instanceof CustomUserDetails) {
                 userId = ((CustomUserDetails) userDetails).getUserId();
             }
-        }
+        } */
 
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer("self")
                 .issuedAt(now)
                 .expiresAt(now.plus(1, ChronoUnit.DAYS))
-                .subject(authentication.getName())
-                .claim("roles", roles)  // Ajouter les rôles comme une réclamation
-                .claim("user_id", userId)
+                .subject(user.getFirstName() + " " + user.getLastName())
+                .claim("roles", user.getUserRole())  // Ajouter les rôles comme une réclamation
+                .claim("user_id", user.getId())
                 .build();
 
         JwtEncoderParameters jwtEncoderParameters = JwtEncoderParameters.from(JwsHeader.with(MacAlgorithm.HS256).build(), claims);
