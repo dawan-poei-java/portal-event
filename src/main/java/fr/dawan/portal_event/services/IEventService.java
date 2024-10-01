@@ -11,5 +11,6 @@ public interface IEventService {
     void deleteEvent(long id);
     List<EventDto> getUpcomingEvents();
     List<EventDto> getEventsByCity(String cityName);
+    EventDto getEventByIdAndCity(long id, String cityName);
     
 }
