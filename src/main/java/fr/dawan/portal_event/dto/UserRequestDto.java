@@ -8,6 +8,7 @@ import fr.dawan.portal_event.entities.City;
 import fr.dawan.portal_event.enums.UserRole;
 import fr.dawan.portal_event.validations.OnLogin;
 import fr.dawan.portal_event.validations.OnRegister;
+import io.micrometer.common.lang.Nullable;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -44,7 +45,11 @@ public class UserRequestDto {
     @NotBlank(groups = {OnRegister.class}, message = "Role must be specified")
     private UserRole role;
 
+    @NotBlank(groups = {OnRegister.class}, message = "Address must be specified")
     private String address;
+
+    @Nullable
+    private String addressComplement;
 
     @NotNull(groups = {OnRegister.class}, message = "City must be specified")
     private City city;
@@ -55,8 +60,29 @@ public class UserRequestDto {
     @NotBlank(groups = {OnRegister.class}, message = "Birth date must be specified")
     private LocalDate birthDate;
 
+    @NotBlank(groups = {OnRegister.class}, message = "Phone number must be specified")
+    private String phoneNumber;
+
     public boolean isPasswordConfirmed() {
         return password.equals(confirmedPassword);
     }
+
+@Override
+public String toString() {
+    return "UserRequestDto{" +
+            "email='" + email + '\'' +
+            ", password='[PROTECTED]'" +
+            ", confirmedPassword='[PROTECTED]'" +
+            ", firstName='" + firstName + '\'' +
+            ", lastName='" + lastName + '\'' +
+            ", role=" + role +
+            ", address='" + address + '\'' +
+            ", addressComplement='" + addressComplement + '\'' +
+            ", city=" + city +
+            ", zipCode='" + zipCode + '\'' +
+            ", birthDate=" + birthDate +
+            ", phoneNumber='" + phoneNumber + '\'' +
+            '}';
+}
 }
     

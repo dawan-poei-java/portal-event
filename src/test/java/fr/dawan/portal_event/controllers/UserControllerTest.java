@@ -81,7 +81,7 @@ public class UserControllerTest {
 
         // Mock JWT token generation
         token = "mocked_jwt_token";
-        when(jwtService.generateToken(any(Authentication.class))).thenReturn(token);
+        //when(jwtService.generateToken(any(Authentication.class))).thenReturn(token);
     }
 
 

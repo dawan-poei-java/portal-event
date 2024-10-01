@@ -17,10 +17,6 @@ import fr.dawan.portal_event.repositories.UserRepository;
 import fr.dawan.portal_event.utils.DtoTool;
 import jakarta.security.auth.message.AuthException;
 
-import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Collections;
-
 @Service
 public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
@@ -41,15 +37,9 @@ public class AuthenticationService {
         Object principal = authentication.getPrincipal();
         if(principal instanceof CustomUserDetails){
             CustomUserDetails userDetails = (CustomUserDetails) principal;
-            LocalDateTime now = LocalDateTime.now();
             LoginResponse response = new LoginResponse(
-                jwtService.generateToken(authentication),
-                userDetails.getUsername(),
-                userDetails.getRole(),
-                userDetails.getFirstName(),
-                userDetails.getLastName(),
-                now.plusDays(1),
-                userDetails.getUserId()
+                jwtService.generateToken(userDetails.getUser()),
+                userDetails.getUser()
             );
             return response;
             
@@ -65,18 +55,11 @@ public class AuthenticationService {
         dto.setRole(dto.getRole() == null ? UserRole.USER : dto.getRole());
         User user = DtoTool.convert(dto, User.class);
 
-        userRepository.save(user);
-
-        Collection<? extends GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(dto.getRole().toString()));
+        user = userRepository.save(user);
 
         LoginResponse response = new LoginResponse(
-            jwtService.generateToken(new UsernamePasswordAuthenticationToken(dto.getEmail(), null, authorities)),
-            dto.getEmail(),
-            dto.getRole(),
-            dto.getFirstName(),
-            dto.getLastName(),
-            LocalDateTime.now().plusDays(1),
-            user.getId()
+            jwtService.generateToken(user),
+            user
         );
 
         return response;

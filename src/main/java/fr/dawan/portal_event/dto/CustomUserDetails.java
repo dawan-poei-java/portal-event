@@ -1,13 +1,14 @@
 package fr.dawan.portal_event.dto;
 
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import fr.dawan.portal_event.entities.User;
 import fr.dawan.portal_event.enums.UserRole;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,12 +17,17 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class CustomUserDetails implements UserDetails{
-    private String email;
-    private String password;
-    private String firstName;
-    private String lastName;
-    private Set<GrantedAuthority> authorities;
-    private long userId;
+
+
+    private List<GrantedAuthority> authorities;
+
+
+    private User user;
+
+    public CustomUserDetails(User user){
+        this.user = user;
+        this.authorities = List.of(new SimpleGrantedAuthority(user.getUserRole().toString()));
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -30,8 +36,10 @@ public class CustomUserDetails implements UserDetails{
 
     @Override
     public String getUsername() {
-        return email;
+        return user.getEmail();
     }
+
+
     
     public UserRole getRole(){
         String authority = authorities.iterator().next().getAuthority();
@@ -48,6 +56,11 @@ public class CustomUserDetails implements UserDetails{
             default:
                 return UserRole.USER;
         }
+    }
+
+    @Override
+    public String getPassword() {
+        return user.getPassword();
     }
 
 }
