@@ -56,7 +56,7 @@ public class EventController {
     }
 
     @GetMapping(value = "/city/{cityName}/{id}")
-    public ResponseEntity<EventDto>getEventByidAndCity(@PathVariable("cityName") String cityName,@PathVariable("id") Long id){
+    public ResponseEntity<EventDto>getEventByIdAndCity(@PathVariable("cityName") String cityName,@PathVariable("id") Long id){
         EventDto eventDto = eventService.getEventByIdAndCity(id, cityName);
         return new ResponseEntity<>(eventDto, HttpStatus.OK);
     }
