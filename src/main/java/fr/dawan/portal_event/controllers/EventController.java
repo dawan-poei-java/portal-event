@@ -60,6 +60,7 @@ public class EventController {
     public ResponseEntity<EventDto> getPopularEvent(){
         EventDto event = eventService.getPopularEvent();
         return new ResponseEntity<>(event, HttpStatus.OK);
+    }
 
     @GetMapping(value = "/city/{cityName}/{id}")
     public ResponseEntity<EventDto>getEventByIdAndCity(@PathVariable("cityName") String cityName,@PathVariable("id") Long id){
