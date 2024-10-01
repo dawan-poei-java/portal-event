@@ -28,6 +28,17 @@ public class ReservationService implements IReservationService {
         }
         return result;
     }
+    @Override
+    public List<ReservationDto> getReservationsByUserId(Long userId) {
+        List<Reservation> reservations = reservationRepository.findByUserId(userId);
+
+        List<ReservationDto> result = new ArrayList<>();
+        for(Reservation reservation: reservations){
+            ReservationDto dto = DtoTool.convert(reservation, ReservationDto.class);
+            result.add(dto);
+        }
+        return result;
+    }
 
     @Override
     public ReservationDto getById(long id) {
