@@ -1,6 +1,7 @@
 package fr.dawan.portal_event.services;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.ArrayList;
 
@@ -66,6 +67,12 @@ public class EventService implements IEventService {
             eventsDtos.add(DtoTool.convert(event, EventDto.class));
         }
         return eventsDtos;
+    }
+
+    public EventDto getEventByIdAndCity(long id, String cityName) {
+        long cityId = cityRepository.findByName(cityName).getId();
+        EventDto eventDto = DtoTool.convert(eventRepository.findEventByIdAndCityName(id ,cityId), EventDto.class);
+        return eventDto;
     }
 
 

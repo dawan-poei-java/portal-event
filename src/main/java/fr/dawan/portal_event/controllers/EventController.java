@@ -55,6 +55,12 @@ public class EventController {
         return new ResponseEntity<>(events, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/city/{cityName}/{id}")
+    public ResponseEntity<EventDto>getEventByidAndCity(@PathVariable("cityName") String cityName,@PathVariable("id") Long id){
+        EventDto eventDto = eventService.getEventByIdAndCity(id, cityName);
+        return new ResponseEntity<>(eventDto, HttpStatus.OK);
+    }
+
 
     /*
     888888b.         d8888  .d8888b. 8888888 .d8888b.        .d8888b.  8888888b.  888     888 8888888b.  
