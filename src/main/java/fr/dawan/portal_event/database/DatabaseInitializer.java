@@ -18,11 +18,10 @@ public class DatabaseInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         if(cityRepository.count() == 0) {
-            cityRepository.save(new City("Paris", "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/La_Tour_Eiffel_vue_de_la_Tour_Saint-Jacques%2C_Paris_ao%C3%BBt_2014_%282%29.jpg/280px-La_Tour_Eiffel_vue_de_la_Tour_Saint-Jacques%2C_Paris_ao%C3%BBt_2014_%282%29.jpg"));
-            cityRepository.save(new City("Marseille", "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Notre_Dame_de_la_Garde.jpg/280px-Notre_Dame_de_la_Garde.jpg"));
-            cityRepository.save(new City("Lyon", "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/From_Croix_Rousse_To_Fourvi%C3%A8re_%28161423721%29.jpeg/1920px-From_Croix_Rousse_To_Fourvi%C3%A8re_%28161423721%29.jpeg"));
-            cityRepository.save(new City("Toulouse", "https://t4.ftcdn.net/jpg/05/10/54/19/360_F_510541978_JdZbQd0YPXhvR8BKaoqdU5zm9cl0Icke.jpg"));
-            cityRepository.save(new City("Nice", "https://img.static-kl.com/images/media/763BE99A-E6F1-49F2-B8BD022016F42ADF"));
+            cityRepository.save(new City("Paris", "https://unsplash.com/fr/photos/eiffel-tower-paris-france-XSl6VEp7LFg"));
+            cityRepository.save(new City("Marseille", "https://images.pexels.com/photos/11690121/pexels-photo-11690121.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"));
+            cityRepository.save(new City("Toulouse", "https://plus.unsplash.com/premium_photo-1697730048830-03482bd51e10?q=80&w=2751&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"));
+            cityRepository.save(new City("Nice", "https://images.unsplash.com/photo-1618079167568-f480a967d4c3?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"));
             cityRepository.save(new City("Nantes", "https://metropole.nantes.fr/files/images/vie-institutions/villes/nantes-vue-aerienne-1920.jpg"));
             cityRepository.save(new City("Strasbourg", "https://img.lonelyplanet.fr/s3fs-public/styles/wide/public/import/destination/slider/descktop/istock-1070076444.jpg.webp?itok=NKLsSR8I"));
             cityRepository.save(new City("Montpellier", "https://www.montpellier.fr/uploads/Image/70/IMF_COLONNE_RESPONSIVE/GAB_MPL/29354_083_banner-ville-Montpellier.jpg"));

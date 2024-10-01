@@ -56,6 +56,12 @@ public class ReservationController {
         ReservationDto reservation = reservationService.getById(id);
         return new ResponseEntity<>(reservation, HttpStatus.OK);
     }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<ReservationDto>> getReservationsByUserId(@PathVariable Long userId) {
+        List<ReservationDto> reservationDtos = reservationService.getReservationsByUserId(userId);
+        return new ResponseEntity<>(reservationDtos, HttpStatus.OK);
+    }
     
     @Operation(summary = "Create a new reservation", description = "Creates a new reservation and returns the created entity")
     @ApiResponses(value = {
