@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -67,6 +70,30 @@ public class EventController {
         EventDto eventDto = eventService.getEventByIdAndCity(id, cityName);
         return new ResponseEntity<>(eventDto, HttpStatus.OK);
 
+    }
+
+
+    @GetMapping(value = "/organizer")
+    public ResponseEntity<List<EventDto>> getEventsByOrganizer(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication.getPrincipal() instanceof Jwt)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+        boolean isOrganizer = authentication.getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ORGANIZER"));
+        System.out.println("Rôle de l'utilisateur : " + authentication.getAuthorities());
+        if (!isOrganizer) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }
+        
+        Long organizerId = jwt.getClaim("user_id");
+        if (organizerId == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        List<EventDto> events= eventService.getEventsByOrganizer(organizerId);
+        return new ResponseEntity<>(events, HttpStatus.OK);
     }
 
 

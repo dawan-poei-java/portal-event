@@ -2,6 +2,8 @@ package fr.dawan.portal_event.dto;
 
 import java.time.LocalDate;
 
+import org.springframework.format.annotation.NumberFormat;
+
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 
 import fr.dawan.portal_event.entities.City;
@@ -52,6 +54,7 @@ public class UserRequestDto {
     private String addressComplement;
 
     @NotNull(groups = {OnRegister.class}, message = "City must be specified")
+    @NumberFormat
     private City city;
 
     @NotBlank(groups = {OnRegister.class}, message = "Zip code must be specified")

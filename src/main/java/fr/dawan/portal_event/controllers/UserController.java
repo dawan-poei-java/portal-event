@@ -6,6 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,8 +19,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import fr.dawan.portal_event.dto.CustomUserDetails;
 import fr.dawan.portal_event.dto.UserDto;
+import fr.dawan.portal_event.services.AuthenticationService;
+import fr.dawan.portal_event.services.JwtService;
 import fr.dawan.portal_event.services.UserService;
+import fr.dawan.portal_event.utils.DtoTool;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -30,6 +38,12 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private JwtService jwtService;
+
+    @Autowired
+    private AuthenticationService authenticationService;
 
     @Operation(summary = "Get all users", description = "Retrieve a list of all users")
     @ApiResponses(value = {
@@ -58,7 +72,7 @@ public class UserController {
                      content = @Content)
     })
     @GetMapping(value="/{id}", produces = "application/json")
-    @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")    
+    @PreAuthorize("hasRole('ADMIN') or @authenticationService.isAuthenticatedUserMatchingId(#id)")    
     public ResponseEntity<Object> getById(@PathVariable("id") long id) throws Exception{
         UserDto dto = userService.getById(id);
         if(dto == null){
@@ -82,7 +96,7 @@ public class UserController {
                      content = @Content)
     })
     @PutMapping(value="/{id}", consumes = "application/json", produces = "application/json")
-    @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")    
+    @PreAuthorize("hasRole('ADMIN') or @authenticationService.isAuthenticatedUserMatchingId(#id)")    
     public ResponseEntity<UserDto> updateUser(@PathVariable("id") long id, @RequestBody UserDto dto) throws Exception {
         dto.setId(id);
         UserDto updatedUser = userService.saveOrUpdate(dto);
@@ -114,5 +128,25 @@ public class UserController {
         else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with id = " + id + " is not found.");
         }
+    }
+
+    @GetMapping("/me")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<UserDto> getAuthentifiedUserData() throws Exception {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            System.out.println("Authenticate : " + authentication.getPrincipal());
+            // Vérifiez si le principal est un objet Jwt
+            if (authentication.getPrincipal() instanceof Jwt) {
+                Jwt jwt = (Jwt) authentication.getPrincipal();
+                // Utilisez le jeton JWT pour obtenir les informations de l'utilisateur
+                UserDto userDto = DtoTool.convert(jwtService.getUserFromJwt(jwt), UserDto.class);
+                
+                if (userDto != null) {
+                    return ResponseEntity.ok(userDto);
+                }
+            }
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }

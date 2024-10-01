@@ -85,8 +85,8 @@ public class AuthController {
     public ResponseEntity<?> register(@Validated(OnRegister.class) @RequestBody UserRequestDto dto) {
         try {
             System.out.println("DTO reçu : " + dto.toString());
-            City city = cityService.findAndReturnFilledCity(dto.getCity());
-            dto.setCity(city);
+            CityDto cityDto = cityService.getById(dto.getCity().getId());
+            dto.setCity(DtoTool.convert(cityDto,City.class));
             UserDto user = new UserDto(dto);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             System.out.println("UserDto : " + user.toString());

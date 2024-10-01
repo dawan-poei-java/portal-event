@@ -25,8 +25,7 @@ public class LoginResponse {
     private String firstName;
     @Schema(description = "Last Name")
     private String lastName;
-    @Schema(description = "User ID")
-    private long userId;
+
 
     public LoginResponse(String token, User user){
         this.token = token;
@@ -34,6 +33,5 @@ public class LoginResponse {
         this.role = user.getUserRole();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
-        this.userId = user.getId();
     }
 }

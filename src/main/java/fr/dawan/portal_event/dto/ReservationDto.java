@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class ReservationDto {
+
     private Long id;
     private EventDto event;
     private UserDto user;
@@ -53,5 +54,6 @@ public class ReservationDto {
         private Double price;
         private String name;
     }
+
 }
 

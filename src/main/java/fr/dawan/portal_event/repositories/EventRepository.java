@@ -28,4 +28,7 @@ public interface EventRepository extends JpaRepository<Event, Long>{
     @Query("SELECT e FROM Event e WHERE e.id = :id AND e.city.id = :cityId")
     Event findEventByIdAndCityName(Long id, Long cityId);
 
+    @Query("SELECT e FROM Event e WHERE e.organizer.id = :organizerId")
+    List<Event> findEventsByOrganizerId(@Param("organizerId") Long organizerId);
+
 }
