@@ -55,6 +55,12 @@ public class EventController {
         return new ResponseEntity<>(events, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/popular")
+    public ResponseEntity<EventDto> getPopularEvent(){
+        EventDto event = eventService.getPopularEvent();
+        return new ResponseEntity<>(event, HttpStatus.OK);
+    }
+
 
     /*
     888888b.         d8888  .d8888b. 8888888 .d8888b.        .d8888b.  8888888b.  888     888 8888888b.  

@@ -1,12 +1,10 @@
 package fr.dawan.portal_event.entities;
 
-import java.math.BigDecimal;
+
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Set;
 
-import javax.swing.event.DocumentEvent.EventType;
 
 import fr.dawan.portal_event.enums.EventState;
 import jakarta.persistence.*;
@@ -66,7 +64,7 @@ public class Event {
     private User organizer;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
-    private Set<Reservation> reservations;
+    private List<Reservation> reservations;
 
     @Enumerated(EnumType.STRING)
     private EventState state;

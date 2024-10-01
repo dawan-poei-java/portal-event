@@ -18,4 +18,7 @@ public interface EventRepository extends JpaRepository<Event, Long>{
     @Query("SELECT e FROM Event e WHERE e.city.id = :cityId")
     List<Event> findAllByCityId(Long cityId);
     //List<Event> findByEventType(EventType eventType);
+
+    @Query("SELECT e FROM Event e LEFT JOIN e.reservations r WHERE e.startDate > CURRENT_TIMESTAMP GROUP BY e ORDER BY COUNT(r) DESC LIMIT 1")
+    Event findMostPopularEvent();
 }

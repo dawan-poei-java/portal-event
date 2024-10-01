@@ -68,5 +68,8 @@ public class EventService implements IEventService {
         return eventsDtos;
     }
 
+    public EventDto getPopularEvent(){
+        return DtoTool.convert(eventRepository.findMostPopularEvent(), EventDto.class);
+    }
 
 }
