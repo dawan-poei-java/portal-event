@@ -1,9 +1,18 @@
 package fr.dawan.portal_event.controllers;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -16,12 +25,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import fr.dawan.portal_event.dto.EventDto;
 import fr.dawan.portal_event.services.EventService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.servlet.http.HttpServletRequest;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -151,9 +163,38 @@ public class EventController {
         @ApiResponse(responseCode = "500", description = "Internal server error",
                      content = @Content)
     })
-    @PostMapping
-    @PreAuthorize("hasRole('ORGANIZER') or hasRole('ADMIN')")
-    public ResponseEntity<EventDto> createEvent(@RequestBody EventDto event){
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasAuthority('ROLE_ORGANIZER') or hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<EventDto> createEvent(@RequestPart("event") EventDto event,
+                                                @RequestPart(value = "images", required = false) List<MultipartFile> images,
+                                                HttpServletRequest request) throws IOException {
+        System.out.println("TypeEvent de l'évènement : " + event.getTypeEvent().getName());
+        System.out.println("City de l'évènement : " + event.getCity().getName());
+
+        // Gestion des images et des URLs
+        List<String> imageUrls = new ArrayList<>();
+
+        if (images != null && !images.isEmpty()) {
+            Path uploadPath = Paths.get("uploads");
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+
+            String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+
+            for (MultipartFile image : images) {
+                if (!image.isEmpty()) {
+                    String fileName = UUID.randomUUID().toString() + "_" + image.getOriginalFilename();
+                    Path filePath = uploadPath.resolve(fileName);
+                    Files.copy(image.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+                    String imageUrl = baseUrl + "/uploads/" + fileName;
+                    imageUrls.add(imageUrl);
+                }
+            }
+        }
+        
+        event.setImages(imageUrls);
         EventDto createdEvent = eventService.saveOrUpdate(event);
         return new ResponseEntity<>(createdEvent, HttpStatus.CREATED);
     }
