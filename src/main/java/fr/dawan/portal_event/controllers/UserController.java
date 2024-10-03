@@ -30,9 +30,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/users")
+@Tag(name = "User", description = "API pour la gestion des utilisateurs")
 public class UserController {
 
 
@@ -45,12 +47,14 @@ public class UserController {
     @Autowired
     private AuthenticationService authenticationService;
 
-    @Operation(summary = "Get all users", description = "Retrieve a list of all users")
+    @Operation(summary = "Obtenir tous les utilisateurs", description = "Récupère une liste de tous les utilisateurs")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully retrieved the list of users",
+        @ApiResponse(responseCode = "200", description = "Liste des utilisateurs récupérée avec succès",
                      content = @Content(mediaType = "application/json",
                                         schema = @Schema(implementation = UserDto.class))),
-        @ApiResponse(responseCode = "500", description = "Internal server error",
+        @ApiResponse(responseCode = "403", description = "Accès refusé",
+                     content = @Content),
+        @ApiResponse(responseCode = "500", description = "Erreur interne du serveur",
                      content = @Content)
     })
     @GetMapping(value="", produces = "application/json")
@@ -60,15 +64,17 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @Operation(summary = "Get a user by ID", description = "Retrieve a specific user by its ID")
+    @Operation(summary = "Obtenir un utilisateur par ID", description = "Récupère un utilisateur spécifique par son ID")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully retrieved the user",
+        @ApiResponse(responseCode = "200", description = "Utilisateur récupéré avec succès",
                      content = @Content(mediaType = "application/json",
                                         schema = @Schema(implementation = UserDto.class))),
-        @ApiResponse(responseCode = "404", description = "User not found",
+        @ApiResponse(responseCode = "403", description = "Accès refusé",
+                     content = @Content),
+        @ApiResponse(responseCode = "404", description = "Utilisateur non trouvé",
                      content = @Content(mediaType = "text/plain",
                                         schema = @Schema(type = "string"))),
-        @ApiResponse(responseCode = "500", description = "Internal server error",
+        @ApiResponse(responseCode = "500", description = "Erreur interne du serveur",
                      content = @Content)
     })
     @GetMapping(value="/{id}", produces = "application/json")
@@ -83,16 +89,18 @@ public class UserController {
         }
     }
 
-    @Operation(summary = "Update an existing user", description = "Update an existing user by its ID")
+    @Operation(summary = "Mettre à jour un utilisateur existant", description = "Met à jour un utilisateur existant par son ID")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully updated the user",
+        @ApiResponse(responseCode = "200", description = "Utilisateur mis à jour avec succès",
                      content = @Content(mediaType = "application/json",
                                         schema = @Schema(implementation = UserDto.class))),
-        @ApiResponse(responseCode = "400", description = "Invalid input",
+        @ApiResponse(responseCode = "400", description = "Entrée invalide",
                      content = @Content),
-        @ApiResponse(responseCode = "404", description = "User not found",
+        @ApiResponse(responseCode = "403", description = "Accès refusé",
                      content = @Content),
-        @ApiResponse(responseCode = "500", description = "Internal server error",
+        @ApiResponse(responseCode = "404", description = "Utilisateur non trouvé",
+                     content = @Content),
+        @ApiResponse(responseCode = "500", description = "Erreur interne du serveur",
                      content = @Content)
     })
     @PutMapping(value="/{id}", consumes = "application/json", produces = "application/json")
@@ -106,15 +114,17 @@ public class UserController {
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
-    @Operation(summary = "Delete a user", description = "Delete a user by its ID")
+    @Operation(summary = "Supprimer un utilisateur", description = "Supprime un utilisateur par son ID")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully deleted the user",
+        @ApiResponse(responseCode = "200", description = "Utilisateur supprimé avec succès",
                      content = @Content(mediaType = "text/plain",
                                         schema = @Schema(type = "string"))),
-        @ApiResponse(responseCode = "404", description = "User not found",
+        @ApiResponse(responseCode = "403", description = "Accès refusé",
+                     content = @Content),
+        @ApiResponse(responseCode = "404", description = "Utilisateur non trouvé",
                      content = @Content(mediaType = "text/plain",
                                         schema = @Schema(type = "string"))),
-        @ApiResponse(responseCode = "500", description = "Internal server error",
+        @ApiResponse(responseCode = "500", description = "Erreur interne du serveur",
                      content = @Content)
     })
     @DeleteMapping(value="/{id}", produces = "text/plain")
@@ -130,6 +140,16 @@ public class UserController {
         }
     }
 
+    @Operation(summary = "Obtenir les données de l'utilisateur authentifié", description = "Récupère les données de l'utilisateur actuellement authentifié")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Données de l'utilisateur récupérées avec succès",
+                     content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = UserDto.class))),
+        @ApiResponse(responseCode = "401", description = "Non autorisé",
+                     content = @Content),
+        @ApiResponse(responseCode = "500", description = "Erreur interne du serveur",
+                     content = @Content)
+    })
     @GetMapping("/me")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<UserDto> getAuthentifiedUserData() throws Exception {

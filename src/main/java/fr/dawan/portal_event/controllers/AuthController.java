@@ -50,15 +50,15 @@ public class AuthController {
         this.authenticationService = authenticationService;
     }
 
-    @Operation(summary = "Login a user", description = "Login a user and return a JWT Token")
+    @Operation(summary = "Connecter un utilisateur", description = "Connecte un utilisateur et renvoie un jeton JWT")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Connexion réussie", 
                     content = @Content(mediaType = "application/json", 
                     schema = @Schema(implementation = LoginResponse.class))),
-            @ApiResponse(responseCode = "400", description = "Entrée invalide", 
+            @ApiResponse(responseCode = "400", description = "Données d'entrée invalides", 
                     content = @Content(mediaType = "application/json", 
                     schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(responseCode = "401", description = "Authentification échouée", 
+            @ApiResponse(responseCode = "401", description = "Échec de l'authentification", 
                     content = @Content(mediaType = "application/json", 
                     schema = @Schema(implementation = ErrorResponse.class)))
     })
@@ -69,15 +69,15 @@ public class AuthController {
     }
 
 
-    @Operation(summary = "Register a user", description = "Register a user and return a JWT Token")
+    @Operation(summary = "Inscrire un utilisateur", description = "Inscrit un nouvel utilisateur et renvoie un jeton JWT")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Registration successful", 
+            @ApiResponse(responseCode = "200", description = "Inscription réussie", 
                     content = @Content(mediaType = "application/json", 
                     schema = @Schema(implementation = LoginResponse.class))),
-            @ApiResponse(responseCode = "400", description = "Invalid input", 
+            @ApiResponse(responseCode = "400", description = "Données d'entrée invalides", 
                     content = @Content(mediaType = "application/json", 
                     schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(responseCode = "409", description = "User already exists", 
+            @ApiResponse(responseCode = "409", description = "L'utilisateur existe déjà", 
                     content = @Content(mediaType = "application/json", 
                     schema = @Schema(implementation = ErrorResponse.class)))
     })

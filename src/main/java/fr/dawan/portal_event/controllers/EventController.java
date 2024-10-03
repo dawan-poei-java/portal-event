@@ -37,9 +37,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/events")
+@Tag(name = "Événements", description = "API pour la gestion des événements")
 public class EventController {
 
     @Autowired
@@ -57,6 +59,10 @@ public class EventController {
         "Y8888P"   "Y88888P"   "Y8888P"     888     "Y88888P"  888       888      888   T88b 8888888888 "Y888888"   "Y88888P"  8888888888 "Y8888P"     888     "Y8888P"                                                                                                                                                                                                                                                                                                                 
     */
     
+    @Operation(summary = "Obtenir les événements à venir", description = "Récupère une liste des événements à venir")
+    @ApiResponse(responseCode = "200", description = "Liste des événements à venir récupérée avec succès",
+                 content = @Content(mediaType = "application/json",
+                 schema = @Schema(implementation = EventDto.class)))
     @GetMapping("/upcoming")
     public ResponseEntity<List<EventDto>> getUpcomingEvents(){
         List<EventDto> events = eventService.getUpcomingEvents();
@@ -64,6 +70,10 @@ public class EventController {
     }
 
     // Récupérer les events pour une ville en particulier
+    @Operation(summary = "Obtenir les événements par ville", description = "Récupère une liste des événements pour une ville spécifique")
+    @ApiResponse(responseCode = "200", description = "Liste des événements pour la ville récupérée avec succès",
+                 content = @Content(mediaType = "application/json",
+                 schema = @Schema(implementation = EventDto.class)))
     @GetMapping(value = "/city/{cityName}")
     public ResponseEntity<List<EventDto>> getEventsByCity(@PathVariable("cityName") String cityName){
         List<EventDto> events = eventService.getEventsByCity(cityName);
@@ -71,12 +81,20 @@ public class EventController {
     }
 
 
+    @Operation(summary = "Obtenir l'événement le plus populaire", description = "Récupère l'événement le plus populaire")
+    @ApiResponse(responseCode = "200", description = "Événement populaire récupéré avec succès",
+                 content = @Content(mediaType = "application/json",
+                 schema = @Schema(implementation = EventDto.class)))
     @GetMapping(value = "/popular")
     public ResponseEntity<EventDto> getPopularEvent(){
         EventDto event = eventService.getPopularEvent();
         return new ResponseEntity<>(event, HttpStatus.OK);
     }
 
+    @Operation(summary = "Obtenir un événement par ID et ville", description = "Récupère un événement spécifique par son ID et sa ville")
+    @ApiResponse(responseCode = "200", description = "Événement récupéré avec succès",
+                 content = @Content(mediaType = "application/json",
+                 schema = @Schema(implementation = EventDto.class)))
     @GetMapping(value = "/city/{cityName}/{id}")
     public ResponseEntity<EventDto>getEventByIdAndCity(@PathVariable("cityName") String cityName,@PathVariable("id") Long id){
         EventDto eventDto = eventService.getEventByIdAndCity(id, cityName);
@@ -85,6 +103,15 @@ public class EventController {
     }
 
 
+    @Operation(summary = "Obtenir les événements de l'organisateur", description = "Récupère une liste des événements pour l'organisateur connecté")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Liste des événements de l'organisateur récupérée avec succès",
+                     content = @Content(mediaType = "application/json",
+                     schema = @Schema(implementation = EventDto.class))),
+        @ApiResponse(responseCode = "401", description = "Non autorisé"),
+        @ApiResponse(responseCode = "403", description = "Accès refusé"),
+        @ApiResponse(responseCode = "400", description = "Requête invalide")
+    })
     @GetMapping(value = "/organizer")
     public ResponseEntity<List<EventDto>> getEventsByOrganizer(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

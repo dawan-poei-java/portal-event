@@ -12,26 +12,43 @@ import fr.dawan.portal_event.services.ReservationService;
 
 import io.swagger.v3.oas.annotations.*;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 
 @RestController
 @RequestMapping("/api/reservations")
+@Tag(name = "Réservations", description = "API de gestion des réservations")
 public class ReservationController {
 
     @Autowired
     private ReservationService reservationService;
 
-    @Operation(summary = "Get all reservations", description = "Retrieves a list of all reservations")
+    @Operation(
+        summary = "Obtenir toutes les réservations",
+        description = "Récupère une liste de toutes les réservations"
+    )
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully retrieved list",
-                     content = @Content(mediaType = "application/json",
-                     schema = @Schema(implementation = ReservationDto.class))),
-        @ApiResponse(responseCode = "403", description = "You do not have permission to access this resource",
-                     content = @Content),
-        @ApiResponse(responseCode = "500", description = "Internal server error",
-                     content = @Content)
+        @ApiResponse(
+            responseCode = "200",
+            description = "Liste récupérée avec succès",
+            content = @Content(
+                mediaType = "application/json",
+                array = @ArraySchema(schema = @Schema(implementation = ReservationDto.class))
+            )
+        ),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Accès non autorisé",
+            content = @Content
+        ),
+        @ApiResponse(
+            responseCode = "500",
+            description = "Erreur interne du serveur",
+            content = @Content
+        )
     })
     @GetMapping
     public ResponseEntity<List<ReservationDto>> getAll(){
@@ -39,17 +56,34 @@ public class ReservationController {
         return new ResponseEntity<>(reservations, HttpStatus.OK);
     }
 
-    @Operation(summary = "Get a reservation by ID", description = "Returns a single reservation")
+    @Operation(
+        summary = "Obtenir une réservation par ID",
+        description = "Renvoie une seule réservation"
+    )
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully retrieved reservation",
-                     content = @Content(mediaType = "application/json",
-                     schema = @Schema(implementation = ReservationDto.class))),
-        @ApiResponse(responseCode = "404", description = "Reservation not found",
-                     content = @Content),
-        @ApiResponse(responseCode = "403", description = "You do not have permission to access this resource",
-                     content = @Content),
-        @ApiResponse(responseCode = "500", description = "Internal server error",
-                     content = @Content)
+        @ApiResponse(
+            responseCode = "200",
+            description = "Réservation récupérée avec succès",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = ReservationDto.class)
+            )
+        ),
+        @ApiResponse(
+            responseCode = "404",
+            description = "Réservation non trouvée",
+            content = @Content
+        ),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Accès non autorisé",
+            content = @Content
+        ),
+        @ApiResponse(
+            responseCode = "500",
+            description = "Erreur interne du serveur",
+            content = @Content
+        )
     })
     @GetMapping("/{id}")
     public ResponseEntity<ReservationDto> getById(@PathVariable long id){
@@ -57,6 +91,30 @@ public class ReservationController {
         return new ResponseEntity<>(reservation, HttpStatus.OK);
     }
 
+    @Operation(
+        summary = "Obtenir les réservations d'un utilisateur",
+        description = "Récupère une liste de toutes les réservations pour un utilisateur donné"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Liste récupérée avec succès",
+            content = @Content(
+                mediaType = "application/json",
+                array = @ArraySchema(schema = @Schema(implementation = ReservationDto.class))
+            )
+        ),
+        @ApiResponse(
+            responseCode = "403",
+            description = "Accès non autorisé",
+            content = @Content
+        ),
+        @ApiResponse(
+            responseCode = "500",
+            description = "Erreur interne du serveur",
+            content = @Content
+        )
+    })
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<ReservationDto>> getReservationsByUserId(@PathVariable Long userId) {
         List<ReservationDto> reservationDtos = reservationService.getReservationsByUserId(userId);
