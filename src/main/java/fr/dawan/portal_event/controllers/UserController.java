@@ -57,8 +57,9 @@ public class UserController {
         @ApiResponse(responseCode = "500", description = "Erreur interne du serveur",
                      content = @Content)
     })
-    @GetMapping(value = "", produces = "application/json") // Route pour récupérer tous les utilisateurs en JSON
-    @PreAuthorize("hasRole('ADMIN')") // Autorisation : seuls les administrateurs peuvent accéder
+
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+
     public ResponseEntity<List<UserDto>> getAllUsers() throws Exception {
         List<UserDto> users = userService.getAllBy(0, 0, ""); // Appel au service pour récupérer les utilisateurs
         return new ResponseEntity<>(users, HttpStatus.OK); // Retourne la liste avec un statut HTTP 200
