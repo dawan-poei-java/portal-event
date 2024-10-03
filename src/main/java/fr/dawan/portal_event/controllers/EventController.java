@@ -213,7 +213,7 @@ public class EventController {
         @ApiResponse(responseCode = "500", description = "Internal server error",
                      content = @Content)
     })
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('ORGANIZER') or hasRole('ADMIN')")
     public ResponseEntity<EventDto> updateEvent(@PathVariable("id") long id, @RequestBody EventDto event){
         event.setId(id);

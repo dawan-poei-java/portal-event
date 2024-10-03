@@ -47,7 +47,7 @@ public class Event {
     private String zipCode;
 
 
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "event")
     private List<Pricing> pricings;
 
     @ElementCollection
@@ -63,8 +63,7 @@ public class Event {
     @JoinColumn(name = "organizer_id")
     private User organizer;
 
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
-    private List<Reservation> reservations;
+
 
     @Enumerated(EnumType.STRING)
     private EventState state;
