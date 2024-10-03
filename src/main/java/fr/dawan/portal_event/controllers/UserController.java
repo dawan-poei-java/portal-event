@@ -54,7 +54,7 @@ public class UserController {
                      content = @Content)
     })
     @GetMapping(value="", produces = "application/json")
-    @PreAuthorize("hasRole('ADMIN')")    
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<List<UserDto>> getAllUsers() throws Exception {
         List<UserDto> users = userService.getAllBy(0, 0, "");
         return new ResponseEntity<>(users, HttpStatus.OK);
