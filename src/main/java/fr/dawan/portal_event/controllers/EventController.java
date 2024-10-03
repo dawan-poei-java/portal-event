@@ -37,11 +37,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@RequestMapping("/api/events")
+@RequestMapping("/api/events") // Cette annotation spécifie que ce contrôleur gérera toutes les requêtes HTTP sous le chemin "/api/events"
+@Tag(name = "Événements", description = "API pour la gestion des événements")
+
 public class EventController {
 
+    // Injection de la dépendance EventService pour appeler les méthodes de service
     @Autowired
     private EventService eventService;
 
@@ -57,25 +61,64 @@ public class EventController {
         "Y8888P"   "Y88888P"   "Y8888P"     888     "Y88888P"  888       888      888   T88b 8888888888 "Y888888"   "Y88888P"  8888888888 "Y8888P"     888     "Y8888P"                                                                                                                                                                                                                                                                                                                 
     */
     
+      /*
+     * Méthode pour récupérer la liste des événements à venir
+     * Endpoint : GET /api/events/upcoming
+     */
+    @Operation(summary = "Obtenir les événements à venir", description = "Récupère une liste des événements à venir")
+    @ApiResponse(responseCode = "200", description = "Liste des événements à venir récupérée avec succès",
+                 content = @Content(mediaType = "application/json",
+                 schema = @Schema(implementation = EventDto.class)))
     @GetMapping("/upcoming")
     public ResponseEntity<List<EventDto>> getUpcomingEvents(){
+        // Appel du service pour obtenir les événements à venir
         List<EventDto> events = eventService.getUpcomingEvents();
+        // Retourne la liste des événements avec le code HTTP 200 OK
         return new ResponseEntity<>(events, HttpStatus.OK);
     }
 
+
+       /*
+     * Méthode pour récupérer les événements en fonction d'une ville
+     * Endpoint : GET /api/events/city/{cityName}
+     */
     // Récupérer les events pour une ville en particulier
+    @Operation(summary = "Obtenir les événements par ville", description = "Récupère une liste des événements pour une ville spécifique")
+    @ApiResponse(responseCode = "200", description = "Liste des événements pour la ville récupérée avec succès",
+                 content = @Content(mediaType = "application/json",
+                 schema = @Schema(implementation = EventDto.class)))
+
     @GetMapping(value = "/city/{cityName}")
     public ResponseEntity<List<EventDto>> getEventsByCity(@PathVariable("cityName") String cityName){
+         // Appel du service pour obtenir les événements d'une ville donnée
         List<EventDto> events = eventService.getEventsByCity(cityName);
+        // Retourne la liste des événements avec le code HTTP 200 OK
         return new ResponseEntity<>(events, HttpStatus.OK);
     }
 
 
+    /*
+     * Méthode pour récupérer l'événement le plus populaire
+     * Endpoint : GET /api/events/popular
+     */
+    @Operation(summary = "Obtenir l'événement le plus populaire", description = "Récupère l'événement le plus populaire")
+    @ApiResponse(responseCode = "200", description = "Événement populaire récupéré avec succès",
+                 content = @Content(mediaType = "application/json",
+                 schema = @Schema(implementation = EventDto.class)))
     @GetMapping(value = "/popular")
     public ResponseEntity<EventDto> getPopularEvent(){
         EventDto event = eventService.getPopularEvent();
         return new ResponseEntity<>(event, HttpStatus.OK);
     }
+
+         /*
+     * Méthode pour récupérer un événement spécifique par son ID et la ville
+     * Endpoint : GET /api/events/city/{cityName}/{id}
+     */
+    @Operation(summary = "Obtenir un événement par ID et ville", description = "Récupère un événement spécifique par son ID et sa ville")
+    @ApiResponse(responseCode = "200", description = "Événement récupéré avec succès",
+                 content = @Content(mediaType = "application/json",
+                 schema = @Schema(implementation = EventDto.class)))
 
     @GetMapping(value = "/city/{cityName}/{id}")
     public ResponseEntity<EventDto>getEventByIdAndCity(@PathVariable("cityName") String cityName,@PathVariable("id") Long id){
@@ -85,26 +128,47 @@ public class EventController {
     }
 
 
+    /*
+     * Méthode pour récupérer les événements créés par l'organisateur connecté
+     * Endpoint : GET /api/events/organizer
+     */
+    @Operation(summary = "Obtenir les événements de l'organisateur", description = "Récupère une liste des événements pour l'organisateur connecté")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Liste des événements de l'organisateur récupérée avec succès",
+                     content = @Content(mediaType = "application/json",
+                     schema = @Schema(implementation = EventDto.class))),
+        @ApiResponse(responseCode = "401", description = "Non autorisé"),
+        @ApiResponse(responseCode = "403", description = "Accès refusé"),
+        @ApiResponse(responseCode = "400", description = "Requête invalide")
+    })
     @GetMapping(value = "/organizer")
     public ResponseEntity<List<EventDto>> getEventsByOrganizer(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        // Vérification que l'utilisateur est bien authentifié avec un JWT
         if (!(authentication.getPrincipal() instanceof Jwt)) {
+            // Si ce n'est pas le cas, on retourne une réponse Unauthorized
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         
+        // Vérifie si l'utilisateur a le rôle d'organisateur
         Jwt jwt = (Jwt) authentication.getPrincipal();
         boolean isOrganizer = authentication.getAuthorities().stream()
                 .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ORGANIZER"));
         System.out.println("Rôle de l'utilisateur : " + authentication.getAuthorities());
+        // Si l'utilisateur n'a pas le rôle d'organisateur, on retourne un code 403 Forbidden
         if (!isOrganizer) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
         
+        // Récupération de l'ID de l'organisateur à partir du JWT
         Long organizerId = jwt.getClaim("user_id");
         if (organizerId == null) {
+            // Si l'ID de l'organisateur n'est pas présent, on retourne un code 400 Bad Request
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
+        // Appel du service pour obtenir les événements organisés par l'utilisateur
         List<EventDto> events= eventService.getEventsByOrganizer(organizerId);
+        // Retourne la liste des événements avec un code HTTP 200 OK
         return new ResponseEntity<>(events, HttpStatus.OK);
     }
 
@@ -118,6 +182,12 @@ public class EventController {
     888    888  d88P   888       "888  888  888    888      888    888 888 T88b   888     888 888    888 
     888   d88P d8888888888 Y88b  d88P  888  Y88b  d88P      Y88b  d88P 888  T88b  Y88b. .d88P 888  .d88P 
     8888888P" d88P     888  "Y8888P" 8888888 "Y8888P"        "Y8888P"  888   T88b  "Y88888P"  8888888P"  
+     */
+
+
+      /*
+     * Méthode pour récupérer tous les événements
+     * Endpoint : GET /api/events
      */
 
     @Operation(summary = "Get all events", description = "Retrieve a list of all events")
@@ -135,6 +205,10 @@ public class EventController {
         return new ResponseEntity<>(events, HttpStatus.OK);
     }
 
+    /*
+     * Méthode pour récupérer un événement par son ID
+     * Endpoint : GET /api/events/{id}
+     */
     @Operation(summary = "Get an event by ID", description = "Retrieve a specific event by its ID")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Successfully retrieved the event",
@@ -151,6 +225,10 @@ public class EventController {
         return new ResponseEntity<>(event, HttpStatus.OK);
     }
 
+     /*
+     * Méthode pour créer un nouvel événement (requiert le rôle ORGANIZER ou ADMIN)
+     * Endpoint : POST /api/events
+     */
     @Operation(summary = "Create a new event", description = "Create a new event (requires ORGANIZER or ADMIN role)")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "Successfully created the event",
@@ -194,11 +272,17 @@ public class EventController {
             }
         }
         
+        // Sauvegarde de l'événement avec les informations mises à jour
         event.setImages(imageUrls);
         EventDto createdEvent = eventService.saveOrUpdate(event);
+         // Retourne l'événement créé avec un code HTTP 201 Created
         return new ResponseEntity<>(createdEvent, HttpStatus.CREATED);
     }
 
+    /*
+     * Méthode pour mettre à jour un événement existant
+     * Endpoint : PUT /api/events/{id}
+     */
     @Operation(summary = "Update an event", description = "Update an existing event (requires ORGANIZER or ADMIN role)")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Successfully updated the event",
@@ -221,6 +305,11 @@ public class EventController {
         return new ResponseEntity<>(updatedEvent, HttpStatus.OK);
     }
 
+
+    /*
+     * Méthode pour supprimer un événément existant
+     * Endpoint : Delete /api/events/{id}
+     */
     @Operation(summary = "Delete an event", description = "Delete an existing event (requires ORGANIZER or ADMIN role)")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "204", description = "Successfully deleted the event",

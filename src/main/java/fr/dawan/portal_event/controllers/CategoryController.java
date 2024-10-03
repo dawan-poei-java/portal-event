@@ -23,21 +23,22 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/categories")
+@Tag(name = "Catégorie", description = "API de gestion des catégories")
 public class CategoryController {
-    
     
     @Autowired
     private CategoryService categoryService;
 
-    @Operation(summary = "Get all categories", description = "Retrieve a list of all categories")
+    @Operation(summary = "Obtenir toutes les catégories", description = "Récupère la liste de toutes les catégories")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully retrieved the list of categories",
-                     content = @Content(mediaType = "application/json",
-                     schema = @Schema(implementation = CategoryDto.class))),
-        @ApiResponse(responseCode = "500", description = "Internal server error",
+        @ApiResponse(responseCode = "200", description = "Liste des catégories récupérée avec succès",
+                     content = @Content(mediaType = "application/json")),
+        @ApiResponse(responseCode = "500", description = "Erreur interne du serveur",
                      content = @Content)
     })
     @GetMapping
@@ -46,33 +47,32 @@ public class CategoryController {
         return new ResponseEntity<>(categories, HttpStatus.OK);
     }
 
-    @Operation(summary = "Get a category by ID", description = "Retrieve a specific category by its ID")
+    @Operation(summary = "Obtenir une catégorie par ID", description = "Récupère une catégorie spécifique par son ID")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully retrieved the category",
+        @ApiResponse(responseCode = "200", description = "Catégorie récupérée avec succès",
                      content = @Content(mediaType = "application/json",
                      schema = @Schema(implementation = CategoryDto.class))),
-        @ApiResponse(responseCode = "404", description = "Category not found",
+        @ApiResponse(responseCode = "404", description = "Catégorie non trouvée",
                      content = @Content),
-        @ApiResponse(responseCode = "500", description = "Internal server error",
+        @ApiResponse(responseCode = "500", description = "Erreur interne du serveur",
                      content = @Content)
     })
     @GetMapping("/{id}")
-    public ResponseEntity<CategoryDto> getCategoryById(@PathVariable("id") long id){
+    public ResponseEntity<CategoryDto> getCategoryById(@Parameter(description = "ID de la catégorie", required = true) @PathVariable("id") long id){
         CategoryDto category = categoryService.getById(id);
         return new ResponseEntity<>(category, HttpStatus.OK);
     }
 
-
-    @Operation(summary = "Create a new category", description = "Create a new category (requires ADMIN role)")
+    @Operation(summary = "Créer une nouvelle catégorie", description = "Crée une nouvelle catégorie (nécessite le rôle ADMIN)")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Successfully created the category",
+        @ApiResponse(responseCode = "201", description = "Catégorie créée avec succès",
                      content = @Content(mediaType = "application/json",
                      schema = @Schema(implementation = CategoryDto.class))),
-        @ApiResponse(responseCode = "400", description = "Invalid input",
+        @ApiResponse(responseCode = "400", description = "Entrée invalide",
                      content = @Content),
-        @ApiResponse(responseCode = "403", description = "Access denied",
+        @ApiResponse(responseCode = "403", description = "Accès refusé",
                      content = @Content),
-        @ApiResponse(responseCode = "500", description = "Internal server error",
+        @ApiResponse(responseCode = "500", description = "Erreur interne du serveur",
                      content = @Content)
     })
     @PostMapping
@@ -82,18 +82,18 @@ public class CategoryController {
         return new ResponseEntity<>(createdCategory, HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Update a category", description = "Update an existing category by its ID (requires ADMIN role)")
+    @Operation(summary = "Mettre à jour une catégorie", description = "Mise à jour d'une catégorie existante par son ID (nécessite le rôle ADMIN)")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully updated the category",
+        @ApiResponse(responseCode = "200", description = "Catégorie mise à jour avec succès",
                      content = @Content(mediaType = "application/json",
                      schema = @Schema(implementation = CategoryDto.class))),
-        @ApiResponse(responseCode = "400", description = "Invalid input",
+        @ApiResponse(responseCode = "400", description = "Entrée invalide",
                      content = @Content),
-        @ApiResponse(responseCode = "403", description = "Access denied",
+        @ApiResponse(responseCode = "403", description = "Accès refusé",
                      content = @Content),
-        @ApiResponse(responseCode = "404", description = "Category not found",
+        @ApiResponse(responseCode = "404", description = "Catégorie non trouvée",
                      content = @Content),
-        @ApiResponse(responseCode = "500", description = "Internal server error",
+        @ApiResponse(responseCode = "500", description = "Erreur interne du serveur",
                      content = @Content)
     })
     @PutMapping("/{id}")
@@ -103,16 +103,16 @@ public class CategoryController {
         return new ResponseEntity<>(updatedCategory, HttpStatus.OK);
     }
 
-    @Operation(summary = "Delete a category", description = "Delete a category by its ID (requires ADMIN role)")
+    @Operation(summary = "Supprimer une catégorie", description = "Suppression d'une catégorie par son ID (nécessite le rôle ADMIN)")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully deleted the category",
+        @ApiResponse(responseCode = "200", description = "Catégorie supprimée avec succès",
                      content = @Content(mediaType = "text/plain",
                      schema = @Schema(type = "string"))),
-        @ApiResponse(responseCode = "403", description = "Access denied",
+        @ApiResponse(responseCode = "403", description = "Accès refusé",
                      content = @Content),
-        @ApiResponse(responseCode = "404", description = "Category not found",
+        @ApiResponse(responseCode = "404", description = "Catégorie non trouvée",
                      content = @Content),
-        @ApiResponse(responseCode = "500", description = "Internal server error",
+        @ApiResponse(responseCode = "500", description = "Erreur interne du serveur",
                      content = @Content)
     })
     @DeleteMapping("/{id}")
