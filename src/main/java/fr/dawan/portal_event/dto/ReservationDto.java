@@ -35,6 +35,11 @@ public class ReservationDto {
         private long id;
         private Double price;
         private String name;
+        private EventDto event;
+        @Data
+        public static class EventDto{
+            private Long id;
+        }
     }
 
 }
