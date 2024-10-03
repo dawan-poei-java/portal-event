@@ -22,7 +22,7 @@ public interface EventRepository extends JpaRepository<Event, Long>{
     //List<Event> findByEventType(EventType eventType);
 
 
-    @Query("SELECT e FROM Event e LEFT JOIN e.reservations r WHERE e.startDate > CURRENT_TIMESTAMP GROUP BY e ORDER BY COUNT(r) DESC LIMIT 1")
+    @Query("SELECT e FROM Event e LEFT JOIN e.pricings p LEFT  join  p.reservations r WHERE e.startDate > CURRENT_TIMESTAMP GROUP BY e ORDER BY COUNT(r) DESC LIMIT 1")
     Event findMostPopularEvent();
 
     @Query("SELECT e FROM Event e WHERE e.id = :id AND e.city.id = :cityId")
