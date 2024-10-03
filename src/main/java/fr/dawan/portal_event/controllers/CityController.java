@@ -20,18 +20,23 @@ import fr.dawan.portal_event.services.CityService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/cities")
+@Tag(name = "City", description = "API pour la gestion des villes")
 public class CityController {
 
     @Autowired
     private CityService cityService;
 
-    @Operation(summary = "Get all cities", description = "Retrieve a list of all cities")
+    @Operation(
+        summary = "Obtenir toutes les villes",
+        description = "Récupère la liste de toutes les villes"
+    )
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully retrieved the list of cities"),
-        @ApiResponse(responseCode = "500", description = "Internal server error")
+        @ApiResponse(responseCode = "200", description = "Liste des villes récupérée avec succès"),
+        @ApiResponse(responseCode = "500", description = "Erreur interne du serveur")
     })
     @GetMapping
     public ResponseEntity<List<CityDto>> getAllCities(){
@@ -39,11 +44,14 @@ public class CityController {
         return new ResponseEntity<>(cities, HttpStatus.OK);
     }
 
-    @Operation(summary = "Get a city by ID", description = "Retrieve a specific city by its ID")
+    @Operation(
+        summary = "Obtenir une ville par ID",
+        description = "Récupère une ville spécifique par son ID"
+    )
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully retrieved the city"),
-        @ApiResponse(responseCode = "404", description = "City not found"),
-        @ApiResponse(responseCode = "500", description = "Internal server error")
+        @ApiResponse(responseCode = "200", description = "Ville récupérée avec succès"),
+        @ApiResponse(responseCode = "404", description = "Ville non trouvée"),
+        @ApiResponse(responseCode = "500", description = "Erreur interne du serveur")
     })
     @GetMapping("/{id}")
     public ResponseEntity<CityDto> getCityById(@PathVariable("id") long id){
@@ -51,12 +59,15 @@ public class CityController {
         return new ResponseEntity<>(city, HttpStatus.OK);
     }
 
-    @Operation(summary = "Create a new city", description = "Create a new city (requires ADMIN role)")
+    @Operation(
+        summary = "Créer une nouvelle ville",
+        description = "Crée une nouvelle ville (nécessite le rôle ADMIN)"
+    )
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "City successfully created"),
-        @ApiResponse(responseCode = "400", description = "Invalid input"),
-        @ApiResponse(responseCode = "403", description = "Access denied"),
-        @ApiResponse(responseCode = "500", description = "Internal server error")
+        @ApiResponse(responseCode = "201", description = "Ville créée avec succès"),
+        @ApiResponse(responseCode = "400", description = "Entrée invalide"),
+        @ApiResponse(responseCode = "403", description = "Accès refusé"),
+        @ApiResponse(responseCode = "500", description = "Erreur interne du serveur")
     })
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")    
@@ -65,13 +76,16 @@ public class CityController {
         return new ResponseEntity<>(createdCity, HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Update a city", description = "Update an existing city by its ID (requires ADMIN role)")
+    @Operation(
+        summary = "Mettre à jour une ville",
+        description = "Met à jour une ville existante par son ID (nécessite le rôle ADMIN)"
+    )
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "City successfully updated"),
-        @ApiResponse(responseCode = "400", description = "Invalid input"),
-        @ApiResponse(responseCode = "403", description = "Access denied"),
-        @ApiResponse(responseCode = "404", description = "City not found"),
-        @ApiResponse(responseCode = "500", description = "Internal server error")
+        @ApiResponse(responseCode = "200", description = "Ville mise à jour avec succès"),
+        @ApiResponse(responseCode = "400", description = "Entrée invalide"),
+        @ApiResponse(responseCode = "403", description = "Accès refusé"),
+        @ApiResponse(responseCode = "404", description = "Ville non trouvée"),
+        @ApiResponse(responseCode = "500", description = "Erreur interne du serveur")
     })
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")    
@@ -80,12 +94,15 @@ public class CityController {
         return new ResponseEntity<>(updatedCity, HttpStatus.OK);
     }
 
-    @Operation(summary = "Delete a city", description = "Delete a city by its ID (requires ADMIN role)")
+    @Operation(
+        summary = "Supprimer une ville",
+        description = "Supprime une ville par son ID (nécessite le rôle ADMIN)"
+    )
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "City successfully deleted"),
-        @ApiResponse(responseCode = "403", description = "Access denied"),
-        @ApiResponse(responseCode = "404", description = "City not found"),
-        @ApiResponse(responseCode = "500", description = "Internal server error")
+        @ApiResponse(responseCode = "200", description = "Ville supprimée avec succès"),
+        @ApiResponse(responseCode = "403", description = "Accès refusé"),
+        @ApiResponse(responseCode = "404", description = "Ville non trouvée"),
+        @ApiResponse(responseCode = "500", description = "Erreur interne du serveur")
     })
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")    

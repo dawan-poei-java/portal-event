@@ -22,21 +22,35 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/pricings")
+@Tag(name = "Pricing", description = "API de gestion des tarifs")
 public class PricingController {
 
     @Autowired
     private PricingService pricingService;
 
-    @Operation(summary = "Get all pricings", description = "Retrieve a list of all pricings")
+    @Operation(
+        summary = "Obtenir tous les tarifs", 
+        description = "Récupère la liste de tous les tarifs disponibles"
+    )
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully retrieved the list of pricings",
-                     content = @Content(mediaType = "application/json",
-                                        schema = @Schema(implementation = PricingDto[].class))),
-        @ApiResponse(responseCode = "500", description = "Internal server error",
-                     content = @Content)
+        @ApiResponse(
+            responseCode = "200", 
+            description = "Liste des tarifs récupérée avec succès",
+            content = @Content(
+                mediaType = "application/json",
+                array = @ArraySchema(schema = @Schema(implementation = PricingDto.class))
+            )
+        ),
+        @ApiResponse(
+            responseCode = "500", 
+            description = "Erreur interne du serveur",
+            content = @Content
+        )
     })
     @GetMapping
     public ResponseEntity<List<PricingDto>> getAllPricings(){
@@ -44,15 +58,29 @@ public class PricingController {
         return new ResponseEntity<>(pricings, HttpStatus.OK);
     }
 
-    @Operation(summary = "Get a pricing by ID", description = "Retrieve a specific pricing by its ID")
+    @Operation(
+        summary = "Obtenir un tarif par ID", 
+        description = "Récupère un tarif spécifique par son identifiant"
+    )
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully retrieved the pricing",
-                     content = @Content(mediaType = "application/json",
-                                        schema = @Schema(implementation = PricingDto.class))),
-        @ApiResponse(responseCode = "404", description = "Pricing not found",
-                     content = @Content),
-        @ApiResponse(responseCode = "500", description = "Internal server error",
-                     content = @Content)
+        @ApiResponse(
+            responseCode = "200", 
+            description = "Tarif récupéré avec succès",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = PricingDto.class)
+            )
+        ),
+        @ApiResponse(
+            responseCode = "404", 
+            description = "Tarif non trouvé",
+            content = @Content
+        ),
+        @ApiResponse(
+            responseCode = "500", 
+            description = "Erreur interne du serveur",
+            content = @Content
+        )
     })
     @GetMapping("/{id}")
     public ResponseEntity<PricingDto> getPricingById(@PathVariable("id") long id){
@@ -60,17 +88,34 @@ public class PricingController {
         return new ResponseEntity<>(pricing, HttpStatus.OK);
     }
 
-    @Operation(summary = "Create a new pricing", description = "Create a new pricing (requires ORGANIZER or ADMIN role)")
+    @Operation(
+        summary = "Créer un nouveau tarif", 
+        description = "Crée un nouveau tarif (nécessite le rôle ORGANIZER ou ADMIN)"
+    )
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Successfully created the pricing",
-                     content = @Content(mediaType = "application/json",
-                                        schema = @Schema(implementation = PricingDto.class))),
-        @ApiResponse(responseCode = "400", description = "Invalid input",
-                     content = @Content),
-        @ApiResponse(responseCode = "403", description = "Access denied",
-                     content = @Content),
-        @ApiResponse(responseCode = "500", description = "Internal server error",
-                     content = @Content)
+        @ApiResponse(
+            responseCode = "201", 
+            description = "Tarif créé avec succès",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = PricingDto.class)
+            )
+        ),
+        @ApiResponse(
+            responseCode = "400", 
+            description = "Données d'entrée invalides",
+            content = @Content
+        ),
+        @ApiResponse(
+            responseCode = "403", 
+            description = "Accès refusé",
+            content = @Content
+        ),
+        @ApiResponse(
+            responseCode = "500", 
+            description = "Erreur interne du serveur",
+            content = @Content
+        )
     })
     @PostMapping
     @PreAuthorize("hasRole('ORGANIZER') or hasRole('ADMIN')")
@@ -79,19 +124,39 @@ public class PricingController {
         return new ResponseEntity<>(createdPricing, HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Update a pricing", description = "Update an existing pricing by its ID (requires ADMIN role)")
+    @Operation(
+        summary = "Mettre à jour un tarif", 
+        description = "Met à jour un tarif existant par son ID (nécessite le rôle ADMIN)"
+    )
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully updated the pricing",
-                     content = @Content(mediaType = "application/json",
-                                        schema = @Schema(implementation = PricingDto.class))),
-        @ApiResponse(responseCode = "400", description = "Invalid input",
-                     content = @Content),
-        @ApiResponse(responseCode = "403", description = "Access denied",
-                     content = @Content),
-        @ApiResponse(responseCode = "404", description = "Pricing not found",
-                     content = @Content),
-        @ApiResponse(responseCode = "500", description = "Internal server error",
-                     content = @Content)
+        @ApiResponse(
+            responseCode = "200", 
+            description = "Tarif mis à jour avec succès",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = PricingDto.class)
+            )
+        ),
+        @ApiResponse(
+            responseCode = "400", 
+            description = "Données d'entrée invalides",
+            content = @Content
+        ),
+        @ApiResponse(
+            responseCode = "403", 
+            description = "Accès refusé",
+            content = @Content
+        ),
+        @ApiResponse(
+            responseCode = "404", 
+            description = "Tarif non trouvé",
+            content = @Content
+        ),
+        @ApiResponse(
+            responseCode = "500", 
+            description = "Erreur interne du serveur",
+            content = @Content
+        )
     })
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")    
@@ -100,17 +165,34 @@ public class PricingController {
         return new ResponseEntity<>(updatedPricing, HttpStatus.OK);
     }
 
-    @Operation(summary = "Delete a pricing", description = "Delete a pricing by its ID (requires ADMIN role)")
+    @Operation(
+        summary = "Supprimer un tarif", 
+        description = "Supprime un tarif par son ID (nécessite le rôle ADMIN)"
+    )
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully deleted the pricing",
-                     content = @Content(mediaType = "text/plain",
-                                        schema = @Schema(type = "string"))),
-        @ApiResponse(responseCode = "403", description = "Access denied",
-                     content = @Content),
-        @ApiResponse(responseCode = "404", description = "Pricing not found",
-                     content = @Content),
-        @ApiResponse(responseCode = "500", description = "Internal server error",
-                     content = @Content)
+        @ApiResponse(
+            responseCode = "200", 
+            description = "Tarif supprimé avec succès",
+            content = @Content(
+                mediaType = "text/plain",
+                schema = @Schema(type = "string")
+            )
+        ),
+        @ApiResponse(
+            responseCode = "403", 
+            description = "Accès refusé",
+            content = @Content
+        ),
+        @ApiResponse(
+            responseCode = "404", 
+            description = "Tarif non trouvé",
+            content = @Content
+        ),
+        @ApiResponse(
+            responseCode = "500", 
+            description = "Erreur interne du serveur",
+            content = @Content
+        )
     })
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")    

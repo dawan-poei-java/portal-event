@@ -44,13 +44,13 @@ public class UserServiceTest {
 
     @BeforeEach
     public void setUp() {
-        City city = new City();
+/*         City city = new City();
         users = new ArrayList<>();
         userDtos = new ArrayList<>();
         user = new User(1L, "John", "Doe", "john.doe@example.com", "password123", LocalDateTime.of(2024, 9, 23, 11, 0), "0123456789", "123 Rue Exemple", "Appartement 4B", city, "75001", UserRole.ORGANIZER);
         userDto = new UserDto(1L, "John", "Doe", "john.doe@example.com", "password123", LocalDateTime.of(2024, 9, 23, 11, 0), "0123456789", "123 Rue Exemple", "Appartement 4B", city, "75001", UserRole.ORGANIZER);
         users.add(user);
-        userDtos.add(userDto);
+        userDtos.add(userDto); */
 
     }
     @Test

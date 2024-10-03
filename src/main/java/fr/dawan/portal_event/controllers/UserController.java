@@ -30,9 +30,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController // Déclare cette classe comme un contrôleur REST, gérant les requêtes HTTP
 @RequestMapping("/api/users") // Indique que toutes les routes dans cette classe sont préfixées par /api/users
+@Tag(name = "User", description = "API pour la gestion des utilisateurs")
 public class UserController {
 
     @Autowired
@@ -44,12 +46,16 @@ public class UserController {
     @Autowired
     private AuthenticationService authenticationService; // Service d'authentification pour vérifier les droits des utilisateurs
 
-    // Méthode pour récupérer tous les utilisateurs
-    @Operation(summary = "Get all users", description = "Retrieve a list of all users")
+// Méthode pour récupérer tous les utilisateurs
+    @Operation(summary = "Obtenir tous les utilisateurs", description = "Récupère une liste de tous les utilisateurs")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully retrieved the list of users", 
-                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDto.class))),
-        @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
+        @ApiResponse(responseCode = "200", description = "Liste des utilisateurs récupérée avec succès",
+                     content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = UserDto.class))),
+        @ApiResponse(responseCode = "403", description = "Accès refusé",
+                     content = @Content),
+        @ApiResponse(responseCode = "500", description = "Erreur interne du serveur",
+                     content = @Content)
     })
     @GetMapping(value = "", produces = "application/json") // Route pour récupérer tous les utilisateurs en JSON
     @PreAuthorize("hasRole('ADMIN')") // Autorisation : seuls les administrateurs peuvent accéder
@@ -58,13 +64,19 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK); // Retourne la liste avec un statut HTTP 200
     }
 
-    // Méthode pour récupérer un utilisateur spécifique par son ID
-    @Operation(summary = "Get a user by ID", description = "Retrieve a specific user by its ID")
+// Méthode pour récupérer un utilisateur spécifique par son ID
+    @Operation(summary = "Obtenir un utilisateur par ID", description = "Récupère un utilisateur spécifique par son ID")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully retrieved the user", 
-                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDto.class))),
-        @ApiResponse(responseCode = "404", description = "User not found", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
-        @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
+        @ApiResponse(responseCode = "200", description = "Utilisateur récupéré avec succès",
+                     content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = UserDto.class))),
+        @ApiResponse(responseCode = "403", description = "Accès refusé",
+                     content = @Content),
+        @ApiResponse(responseCode = "404", description = "Utilisateur non trouvé",
+                     content = @Content(mediaType = "text/plain",
+                                        schema = @Schema(type = "string"))),
+        @ApiResponse(responseCode = "500", description = "Erreur interne du serveur",
+                     content = @Content)
     })
     @GetMapping(value = "/{id}", produces = "application/json") // Route pour récupérer un utilisateur par son ID
     @PreAuthorize("hasRole('ADMIN') or @authenticationService.isAuthenticatedUserMatchingId(#id)") // Autorisation : administrateurs ou utilisateur correspondant à l'ID
@@ -77,14 +89,20 @@ public class UserController {
         }
     }
 
-    // Méthode pour mettre à jour un utilisateur existant
-    @Operation(summary = "Update an existing user", description = "Update an existing user by its ID")
+// Méthode pour mettre à jour un utilisateur existant
+    @Operation(summary = "Mettre à jour un utilisateur existant", description = "Met à jour un utilisateur existant par son ID")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully updated the user", 
-                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDto.class))),
-        @ApiResponse(responseCode = "400", description = "Invalid input", content = @Content),
-        @ApiResponse(responseCode = "404", description = "User not found", content = @Content),
-        @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
+        @ApiResponse(responseCode = "200", description = "Utilisateur mis à jour avec succès",
+                     content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = UserDto.class))),
+        @ApiResponse(responseCode = "400", description = "Entrée invalide",
+                     content = @Content),
+        @ApiResponse(responseCode = "403", description = "Accès refusé",
+                     content = @Content),
+        @ApiResponse(responseCode = "404", description = "Utilisateur non trouvé",
+                     content = @Content),
+        @ApiResponse(responseCode = "500", description = "Erreur interne du serveur",
+                     content = @Content)
     })
     @PutMapping(value = "/{id}", consumes = "application/json", produces = "application/json") // Route pour mettre à jour un utilisateur par son ID
     @PreAuthorize("hasRole('ADMIN') or @authenticationService.isAuthenticatedUserMatchingId(#id)") // Autorisation : administrateurs ou utilisateur correspondant à l'ID
@@ -97,14 +115,19 @@ public class UserController {
         return new ResponseEntity<>(updatedUser, HttpStatus.OK); // Retourne l'utilisateur mis à jour avec un statut 200
     }
 
-    // Méthode pour supprimer un utilisateur par son ID
-    @Operation(summary = "Delete a user", description = "Delete a user by its ID")
+// Méthode pour supprimer un utilisateur par son ID
+    @Operation(summary = "Supprimer un utilisateur", description = "Supprime un utilisateur par son ID")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully deleted the user", 
-                     content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
-        @ApiResponse(responseCode = "404", description = "User not found", 
-                     content = @Content(mediaType = "text/plain", schema = @Schema(type = "string"))),
-        @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
+        @ApiResponse(responseCode = "200", description = "Utilisateur supprimé avec succès",
+                     content = @Content(mediaType = "text/plain",
+                                        schema = @Schema(type = "string"))),
+        @ApiResponse(responseCode = "403", description = "Accès refusé",
+                     content = @Content),
+        @ApiResponse(responseCode = "404", description = "Utilisateur non trouvé",
+                     content = @Content(mediaType = "text/plain",
+                                        schema = @Schema(type = "string"))),
+        @ApiResponse(responseCode = "500", description = "Erreur interne du serveur",
+                     content = @Content)
     })
     @DeleteMapping(value = "/{id}", produces = "text/plain") // Route pour supprimer un utilisateur par son ID
     @PreAuthorize("hasRole('ADMIN')") // Autorisation : seuls les administrateurs peuvent supprimer des utilisateurs
@@ -118,6 +141,17 @@ public class UserController {
         }
     }
 
+
+    @Operation(summary = "Obtenir les données de l'utilisateur authentifié", description = "Récupère les données de l'utilisateur actuellement authentifié")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Données de l'utilisateur récupérées avec succès",
+                     content = @Content(mediaType = "application/json",
+                                        schema = @Schema(implementation = UserDto.class))),
+        @ApiResponse(responseCode = "401", description = "Non autorisé",
+                     content = @Content),
+        @ApiResponse(responseCode = "500", description = "Erreur interne du serveur",
+                     content = @Content)
+    })
     // Méthode pour récupérer les données de l'utilisateur actuellement authentifié
     @GetMapping("/me") // Route pour récupérer les informations de l'utilisateur authentifié
     @PreAuthorize("isAuthenticated()") // Autorisation : utilisateur doit être authentifié
