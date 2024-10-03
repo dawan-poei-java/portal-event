@@ -11,6 +11,8 @@ public class TypeEventTest {
     @BeforeEach
     public void setup(){
         typeEvent = new TypeEvent();
+        typeEvent.setId(1L);
+        typeEvent.setName("Test Type Event");
     }
 
     @Test
