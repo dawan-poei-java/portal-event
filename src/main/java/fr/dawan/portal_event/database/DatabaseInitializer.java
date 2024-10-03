@@ -2,6 +2,10 @@ package fr.dawan.portal_event.database;
 
 import java.util.List;
 
+import fr.dawan.portal_event.entities.Category;
+import fr.dawan.portal_event.repositories.CategoryRepository;
+import fr.dawan.portal_event.repositories.EventRepository;
+import fr.dawan.portal_event.repositories.TypeEventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -14,6 +18,10 @@ public class DatabaseInitializer implements CommandLineRunner {
 
     @Autowired
     private CityRepository cityRepository;
+    @Autowired
+    private EventRepository eventRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -37,6 +45,23 @@ public class DatabaseInitializer implements CommandLineRunner {
             cityRepository.save(new City("Nîmes", "https://images.winalist.com/blog/wp-content/uploads/2021/05/26144008/AdobeStock_277499536.jpeg"));
             cityRepository.save(new City("Aix-en-Provence", "https://www.aixenprovence.fr/local/cache-gd2/1a/43e306225ecfbf56da657aa05c9b04.jpg?1710250789"));
             cityRepository.save(new City("Saint-Denis", "https://www.tourisme93.com/Local/tourisme93/files/10515/s550-CMN_res_plw15_0014.jpg"));
+        }
+        if (categoryRepository.count() == 0) {
+            categoryRepository.save(new Category("Rock"));
+            categoryRepository.save(new Category("Jazz"));
+            categoryRepository.save(new Category("Pop"));
+            categoryRepository.save(new Category("Hip-Hop"));
+            categoryRepository.save(new Category("Classique"));
+            categoryRepository.save(new Category("Reggae"));
+            categoryRepository.save(new Category("Électro"));
+            categoryRepository.save(new Category("Blues"));
+            categoryRepository.save(new Category("Country"));
+            categoryRepository.save(new Category("Métal"));
+
+        }
+
+        if (eventRepository.count()== 0){
+
         }
     }
 
