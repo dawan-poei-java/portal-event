@@ -17,6 +17,9 @@ import fr.dawan.portal_event.utils.DtoTool;
 public class UserService implements IUserService{
 
 
+//    @Autowired
+//    private DtoTool DtoTool;
+
     @Autowired
     private UserRepository userRepository;
 

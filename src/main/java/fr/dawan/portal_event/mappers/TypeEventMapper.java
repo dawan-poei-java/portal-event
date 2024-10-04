@@ -1,11 +1,13 @@
 package fr.dawan.portal_event.mappers;
 
-import fr.dawan.portal_event.dto.EventDto;
-import fr.dawan.portal_event.entities.Event;
-import org.mapstruct.Mapper;
+import fr.dawan.portal_event.dto.TypeEventDto;
+import fr.dawan.portal_event.entities.TypeEvent;
 
-@Mapper
+import org.mapstruct.Mapper;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+
+@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface TypeEventMapper {
-    EventDto toDto(Event event);
-    Event toEntity(EventDto eventDto);
+    TypeEventDto toDto(TypeEvent typeEvent);
+    TypeEvent toEntity(TypeEventDto typeEventDto);
 }

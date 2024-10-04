@@ -47,8 +47,9 @@ public class CityService implements ICityService{
         cityRepository.deleteById(id);
     }
 
-    public City findAndReturnFilledCity(City city) {
+/*     public City findAndReturnFilledCity(City city) {
         //City city = DtoTool.convert(dto, City.class);
-        return cityRepository.findByName(city.getName());
-    }
+        return cityRepository.findById(city.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Ville non trouvée avec l'ID : " + city.getId()));
+    } */
 }

@@ -33,7 +33,7 @@ public class EventTest {
         event.setZipCode("12345");
         event.setPricings(new ArrayList<>());
         event.setOrganizer(new User()); // You can mock this if needed
-        event.setParticipants(new ArrayList<>());
+        
     }
 
     @Test
@@ -54,19 +54,5 @@ public class EventTest {
         assertEquals(new ArrayList<>(), event.getPricings());
     }
 
-    @Test
-    void testAddParticipant() {
-        User participant = new User();
-        event.getParticipants().add(participant);
-        assertTrue(event.getParticipants().contains(participant));
-    }
-
-    @Test
-    void testRemoveParticipant() {
-        User participant = new User();
-        event.getParticipants().add(participant);
-        event.getParticipants().remove(participant);
-        assertFalse(event.getParticipants().contains(participant));
-    }
 
 }

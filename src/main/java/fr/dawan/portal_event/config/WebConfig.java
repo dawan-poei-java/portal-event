@@ -4,7 +4,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
+import fr.dawan.portal_event.entities.City;
 import fr.dawan.portal_event.utils.CityDtoConverter;
 
 @Configuration
@@ -28,5 +30,12 @@ public class WebConfig implements WebMvcConfigurer{
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(cityDtoConverter);
+        registry.addConverter(String.class, City.class, id -> new City(Long.valueOf(id)));
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/uploads/**")
+                .addResourceLocations("file:uploads/");
     }
 }

@@ -13,6 +13,7 @@ public class CityDto {
 
     private Long id;
     private String name;
+    private String image;
     
     public CityDto(String name) {
         this.name = name;

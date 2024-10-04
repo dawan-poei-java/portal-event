@@ -1,11 +1,12 @@
 package fr.dawan.portal_event.mappers;
 
-import fr.dawan.portal_event.dto.EventDto;
-import fr.dawan.portal_event.entities.Event;
+import fr.dawan.portal_event.dto.CategoryDto;
+import fr.dawan.portal_event.entities.Category;
+
 import org.mapstruct.Mapper;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface CategoryMapper {
-    EventDto toDto(Event event);
-    Event toEntity(EventDto eventDto);
+    CategoryDto toDto(Category category);
+    Category toEntity(CategoryDto categoryDto);
 }

@@ -13,9 +13,15 @@ import java.util.List;
 @NoArgsConstructor
 public class City {
 
-    public City(String name){
+    public City(String name, String image){
         this.name = name;
+        this.image = image;
     }
+
+    public City(long id){
+        this.id = id;
+    }
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,5 +31,8 @@ public class City {
 
     @OneToMany(mappedBy = "city")
     private List<User> users;
+
+    @Column(nullable = false)
+    private String image;
 
 }
